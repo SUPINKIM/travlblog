@@ -5,6 +5,7 @@
 
 import Empty from "@/components/common/empty";
 import { Countries } from "@/components/home/contents/types";
+import PostTitle from "@/components/posts/post-title";
 import { client } from "@/contant/mongo";
 
 interface Contents {
@@ -39,8 +40,8 @@ const PostDetailPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="w-full flex justify-center p-[24px] gap-[8px] flex-col items-center">
-      <h1 className="text-[28px] font-semibold">{data.title}</h1>
+    <div className="w-full h-full flex justify-center p-[24px] gap-[8px] flex-col items-center">
+      <PostTitle title={data.title} />
       <div className="text-[14px] content max-w-[800px] mt-[32px] grid grid-cols-1 gap-[12px] justify-center p-[24px] bg-gray-50 rounded-[8px]">
         <div dangerouslySetInnerHTML={{ __html: data.contents }} />
       </div>
