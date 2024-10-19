@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Error from "@/components/common/error";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="min-w-[320px]">{children}</main>
+        <Error>
+          <main className="min-w-[320px]">{children}</main>
+        </Error>
       </body>
     </html>
   );
