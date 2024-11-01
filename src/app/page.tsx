@@ -1,9 +1,9 @@
 import LinkButton from "@/components/common/link-button";
 import Header from "@/components/home/header";
 import TripPosts from "@/components/home/contents/trip-posts";
-import ImageCarousel from "@/components/home/contents/images/image-carousel";
+import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
 
-import { CAROUSEL_ITEMS } from "@/components/home/contents/images/constant";
+import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -31,7 +31,7 @@ export default async function Home() {
       <Header />
       <div className="mt-[12px] flex items-center gap-[12px] flex-wrap">
         <LinkButton
-          link="https://cut-decade-d21.notion.site/b478021d66f6462182a9a89c5855140c?pvs=4"
+          link="https://cut-decade-d21.notion.site/6ad8b5d74c83429eaa1c5b45795c59f7?pvs=4"
           label="운영자는 누구인가? 🤔"
         />
       </div>

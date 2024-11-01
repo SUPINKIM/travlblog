@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Countries } from "../types";
+import { Countries } from "@/components/home/contents/types";
 import PostCard from "@/components/common/post-card";
 import Empty from "@/components/common/empty";
 

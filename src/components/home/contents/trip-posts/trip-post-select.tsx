@@ -16,12 +16,12 @@ interface TripPostSelectProps {
 const TripPostSelect: FC<TripPostSelectProps> = ({ setCountry }) => {
   return (
     <Select onValueChange={setCountry}>
-      <SelectTrigger className="max-w-[200px]">
+      <SelectTrigger className="max-w-[200px] h-[42px]">
         <SelectValue placeholder="country" />
       </SelectTrigger>
       <SelectContent>
         {Object.values(Countries).map((country) => (
-          <SelectItem key={country} value={country}>
+          <SelectItem className="h-[36px]" key={country} value={country}>
             {country}
           </SelectItem>
         ))}

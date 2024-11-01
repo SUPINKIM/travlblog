@@ -23,7 +23,7 @@ const MapCanvas: FC<MapCanvasProps> = ({ selectedCountry }) => {
   }, []);
 
   return isLoaded ? (
-    <div className="w-full h-[280px] px-[16px] sm:h-[380px] md:h-[680px]">
+    <div className="w-full h-[280px] px-[16px] sm:h-[380px] md:h-[560px]">
       <GoogleMap
         zoom={zoom}
         mapContainerStyle={{ height: "100%", width: "100%" }}
