@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Countries } from "@/components/home/contents/types";
 import PostCard from "@/components/common/post-card";
 import Empty from "@/components/common/empty";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface TripPostCardsProps {
   country: string;
@@ -74,7 +75,13 @@ const TripPostCards: FC<TripPostCardsProps> = ({ country }) => {
           />
         )
       )}
-      {!PostLists[country as Countries].length && <Empty />}
+      {!PostLists[country as Countries].length && (
+        <Card className="h-[270px] w-full flex items-center justify-center text-center">
+          <CardContent className="p-0">
+            <Empty />
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };
