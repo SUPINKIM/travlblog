@@ -57,7 +57,7 @@ const ImageCarousel = ({ images }: { images: Array<Image> }) => {
           {images.map(({ imageUrl, alt, blurDataURL }) => (
             <CarouselItem
               key={alt}
-              className="flex items-center h-[320px] justify-center basis-auto"
+              className="flex items-center h-fit justify-center basis-auto"
             >
               <ImageCarouselItem
                 imageUrl={imageUrl}

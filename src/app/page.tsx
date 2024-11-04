@@ -9,6 +9,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getPlaiceholder } from "plaiceholder";
 import WorldMap from "@/components/home/contents/map";
+import PhotoCards from "@/components/home/contents/photo-cards";
 
 export default async function Home() {
   const newImages = [...CAROUSEL_ITEMS];
@@ -37,6 +38,7 @@ export default async function Home() {
       </div>
       <div className="mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
         <ImageCarousel images={newImages} />
+        <PhotoCards />
         <TripPosts />
         <WorldMap />
       </div>
