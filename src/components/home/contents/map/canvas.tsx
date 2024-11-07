@@ -1,9 +1,9 @@
 "use client";
 
-import { FC, useLayoutEffect, useState } from "react";
-import { Countries } from "../types";
-
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { FC, useLayoutEffect, useState } from "react";
+
+import { Countries } from "../types";
 import { location, locationTitle } from "./types";
 
 interface MapCanvasProps {

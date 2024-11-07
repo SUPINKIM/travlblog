@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Card, CardContent, CardFooter } from "../ui/card";
-import { FC } from "react";
 import Link from "next/link";
+import { FC } from "react";
+
+import { Card, CardContent, CardFooter } from "../ui/card";
 
 const DEFAULT_BLUR_DATA_URL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8Vw8AAkEBX6r220kAAAAASUVORK5CYII=" as const;

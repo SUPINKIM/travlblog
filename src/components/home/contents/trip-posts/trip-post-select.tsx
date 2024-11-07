@@ -1,12 +1,14 @@
 "use client";
 import { Dispatch, FC, SetStateAction } from "react";
+
 import {
   Select,
-  SelectTrigger,
-  SelectItem,
-  SelectValue,
   SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
+
 import { Countries } from "../types";
 
 interface TripPostSelectProps {

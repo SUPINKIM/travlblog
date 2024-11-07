@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import FlagButton from "./flag-button";
 import { useState } from "react";
+
 import { Countries } from "../types";
 import MapCanvas from "./canvas";
+import FlagButton from "./flag-button";
 
 const WorldMap = () => {
   const [selectedCountry, setSelectedCountry] = useState<Countries>();

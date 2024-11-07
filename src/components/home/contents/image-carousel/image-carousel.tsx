@@ -1,5 +1,8 @@
 "use client";
 
+import Autoplay from "embla-carousel-autoplay";
+import { useCallback, useEffect, useState } from "react";
+
 import {
   Carousel,
   CarouselApi,
@@ -10,8 +13,6 @@ import {
 } from "@/components/ui/carousel";
 
 import ImageCarouselItem from "./image-carousel-item";
-import Autoplay from "embla-carousel-autoplay";
-import { useCallback, useEffect, useState } from "react";
 
 interface Image {
   imageUrl: string;

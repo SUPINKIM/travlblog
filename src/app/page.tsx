@@ -1,14 +1,13 @@
-import { getPlaiceholder } from "plaiceholder";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-import Header from "@/components/home/header";
-import TripPosts from "@/components/home/contents/trip-posts";
-import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
-import WorldMap from "@/components/home/contents/map";
+import { getPlaiceholder } from "plaiceholder";
 
 import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
-
-import path from "node:path";
+import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
+import WorldMap from "@/components/home/contents/map";
+import TripPosts from "@/components/home/contents/trip-posts";
+import Header from "@/components/home/header";
 
 export default async function Home() {
   const newImages = [...CAROUSEL_ITEMS];

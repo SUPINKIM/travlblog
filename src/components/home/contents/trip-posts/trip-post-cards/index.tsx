@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { Countries } from "@/components/home/contents/types";
-import PostCard from "@/components/common/post-card";
+
 import Empty from "@/components/common/empty";
+import PostCard from "@/components/common/post-card";
+import { Countries } from "@/components/home/contents/types";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface TripPostCardsProps {
