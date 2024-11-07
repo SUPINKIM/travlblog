@@ -1,10 +1,9 @@
 "use client";
 
-import TripPostSelect from "./trip-post-select";
-import TripPostCards from "@/components/home/contents/trip-post-cards";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useState } from "react";
+
+import TripPostCards from "./trip-post-cards";
+import TripPostSelect from "./trip-post-select";
 
 const TripPosts = () => {
   const [country, setCountry] = useState("");
@@ -13,12 +12,6 @@ const TripPosts = () => {
     <>
       <div className="py-[12px]">
         <div className="flex gap-[8px] justify-between flex-wrap">
-          <Button
-            className="px-[20px] py-[24px] rounded-lg font-semibold text-[16px]"
-            variant="secondary"
-          >
-            <Link href="/posts/1">최신 포스팅 보러 가기 💻</Link>
-          </Button>
           <TripPostSelect setCountry={setCountry} />
         </div>
       </div>

@@ -6,7 +6,7 @@
 import Empty from "@/components/common/empty";
 import { Countries } from "@/components/home/contents/types";
 import PostTitle from "@/components/posts/post-title";
-import { client } from "@/contant/mongo";
+import { client } from "@/constant/mongo";
 
 interface Contents {
   title: string;
@@ -36,7 +36,9 @@ const PostDetailPage = async ({ params }: { params: { id: string } }) => {
   const data = await getData(params.id);
 
   if (!data) {
-    return <Empty className="border-none text-[16px] font-semibold" />;
+    return (
+      <Empty className="text-[16px] mt-[64px] font-semibold text-center" />
+    );
   }
 
   return (
