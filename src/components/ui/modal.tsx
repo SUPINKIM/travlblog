@@ -1,6 +1,7 @@
-import { FC, ReactNode } from "react";
-import { Dialog, DialogTrigger, DialogTitle, DialogContent } from "./dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { FC, ReactNode } from "react";
+
+import { Dialog, DialogContent,DialogTitle, DialogTrigger } from "./dialog";
 
 interface ModalProps {
   trigger: ReactNode;

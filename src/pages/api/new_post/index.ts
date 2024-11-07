@@ -1,5 +1,7 @@
-import { client } from "@/constant/mongo";
 import { NextApiRequest, NextApiResponse } from "next";
+
+import { client } from "@/constant/mongo";
+
 import { RequestData, ResponseData } from "./types";
 
 const POST = async (params: RequestData): Promise<{ save: boolean }> => {
