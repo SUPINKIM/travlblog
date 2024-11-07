@@ -51,8 +51,8 @@ const ImageCarousel = ({ images }: { images: Array<Image> }) => {
         ]}
         setApi={setAPi}
       >
-        <CarouselPrevious className="left-[-2px] z-10" />
-        <CarouselNext className="right-[-16px] z-10" />
+        <CarouselPrevious className="left-[-2px] z-10" variant="secondary" />
+        <CarouselNext className="right-[-16px] z-10" variant="secondary" />
         <CarouselContent className="-ml-2">
           {images.map(({ imageUrl, alt, blurDataURL }) => (
             <CarouselItem

@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from "@/contant/api";
+import { API_ENDPOINTS } from "@/constant/api";
 import { RequestData } from "@/pages/api/new_post/types";
 
 export const createPost = async ({

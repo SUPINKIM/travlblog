@@ -15,7 +15,7 @@ const ImageCarouselItem: FC<ImageCarouselItemProps> = ({
   alt = imageUrl,
 }) => {
   return (
-    <div className="border h-[400px] w-[380px] border-gray-100 relative rounded-[8px]">
+    <div className="border h-[380px] w-[340px] border-gray-100 relative rounded-[8px]">
       <Image
         className="rounded-[8px]"
         src={imageUrl}

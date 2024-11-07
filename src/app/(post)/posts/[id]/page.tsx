@@ -6,7 +6,7 @@
 import Empty from "@/components/common/empty";
 import { Countries } from "@/components/home/contents/types";
 import PostTitle from "@/components/posts/post-title";
-import { client } from "@/contant/mongo";
+import { client } from "@/constant/mongo";
 
 interface Contents {
   title: string;

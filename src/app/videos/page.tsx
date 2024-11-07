@@ -1,4 +1,4 @@
-import Video from "@/components/photo";
+import Video from "@/components/videos";
 
 const Photograph = () => {
   return (

@@ -1,4 +1,4 @@
-import { client } from "@/contant/mongo";
+import { client } from "@/constant/mongo";
 import { NextApiRequest, NextApiResponse } from "next";
 import { RequestData, ResponseData } from "./types";
 

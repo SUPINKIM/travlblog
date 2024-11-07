@@ -1,17 +1,14 @@
 "use client";
 
-import TripPostSelect from "@/components/home/contents/trip-posts/trip-post-select";
+import "react-quill/dist/quill.snow.css";
 
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-
-import { toolbarOptions } from "@/contant/editor";
-import { createPost } from "@/services/posts/create";
 import dynamic from "next/dynamic";
-
 import React, { useRef, useState } from "react";
 
-import "react-quill/dist/quill.snow.css";
+import TripPostSelect from "@/components/home/contents/trip-posts/trip-post-select";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { toolbarOptions } from "@/constant/editor";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -60,7 +57,7 @@ const WritePosts = () => {
 
     // TODO : 이미지만 추출해서 따로 저장하는 로직 추가
 
-    const text = title.current?.value || "";
+    // const text = title.current?.value || "";
 
     // const { message } = await createPost({
     //   title: text,

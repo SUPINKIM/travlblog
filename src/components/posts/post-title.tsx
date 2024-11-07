@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
 
 interface PostTitleProps {
@@ -34,7 +33,7 @@ const PostTitle: FC<PostTitleProps> = ({ title }) => {
         {title}
       </div>
       {!isVisible && (
-        <div className="fixed font-medium text-[14px] right-6 top-[33px] sm:left-[160px]">
+        <div className="fixed z-10 font-medium text-[14px] right-6 top-[33px] sm:left-[160px]">
           {title}
         </div>
       )}

@@ -1,7 +1,8 @@
 "use client";
 
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+
 import { Button } from "../ui/button";
 
 const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
