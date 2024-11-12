@@ -1,11 +1,12 @@
 import Video from "@/components/videos";
 
-const Photograph = () => {
+const Videos = () => {
   return (
     <div className="bg-gray-950 h-[calc(100vh-84px)]">
       <Video />
+      <div className="w-full h-px bg-white" />
     </div>
   );
 };
 
-export default Photograph;
+export default Videos;
