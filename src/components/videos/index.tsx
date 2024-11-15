@@ -29,7 +29,7 @@ const Video = () => {
           exit={{ opacity: 0 }}
           className="w-full flex justify-center p-[16px]"
         >
-          <div className="bg-gray-800 max-w-[800px] rounded-[8px] px-[24px] pt-[16px] pb-[32px] grid grid-cols-1">
+          <div className="bg-gray-800 max-w-[800px] min-w-[360px] rounded-[8px] px-[24px] pt-[16px] pb-[32px] grid grid-cols-1">
             <div className="pb-[16px] flex items-center gap-x-[6px]">
               {buttons.map(({ id, color }) => (
                 <div
