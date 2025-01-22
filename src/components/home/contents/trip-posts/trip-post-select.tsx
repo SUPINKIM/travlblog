@@ -8,8 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Countries } from "../types";
+import { Countries } from "@/types";
 
 interface TripPostSelectProps {
   setCountry: Dispatch<SetStateAction<string>>;

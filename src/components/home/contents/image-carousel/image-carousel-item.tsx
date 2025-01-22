@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { FC } from "react";
+
+import { useModal } from "@/hooks/modal";
 
 interface ImageCarouselItemProps {
   imageUrl: string;
@@ -14,8 +18,35 @@ const ImageCarouselItem: FC<ImageCarouselItemProps> = ({
   base64Url,
   alt = imageUrl,
 }) => {
+  const { open } = useModal();
+
+  const handleClickImage = () => {
+    open({
+      showCloseButton: true,
+      children: (
+        // TODO : 모바일 접속 시에는 바텀으로 띄우기
+        <div className="rounded-[8px] flex mx-[10px] bg-white items-center min-w-[320px] sm:w-[580px] h-fit sm:min-h-[400px]">
+          <div className="overflow-hidden h-full items-center flex gap-x-[8px]">
+            <Image
+              className="rounded-[6px] size-[300px]"
+              src={imageUrl}
+              alt={alt}
+              width={400}
+              height={100}
+              placeholder="blur"
+              blurDataURL={base64Url}
+            />
+          </div>
+        </div>
+      ),
+    });
+  };
+
   return (
-    <div className="border h-[380px] w-[352px] border-gray-100 relative rounded-[8px]">
+    <div
+      onClick={handleClickImage}
+      className="border h-[280px] cursor-pointer w-[320px] border-gray-100 relative rounded-[8px]"
+    >
       <Image
         className="rounded-[8px]"
         src={imageUrl}

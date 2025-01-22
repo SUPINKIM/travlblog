@@ -18,6 +18,8 @@ interface ModalProps {
   content: ReactNode;
   title?: ReactNode;
   showCloseButton?: boolean;
+  showCancelButton?: boolean;
+  showConfirmButton?: boolean;
   isOpen?: boolean;
   onOpenChange?: (next: boolean) => void;
   onConfirm?: () => void;
@@ -30,7 +32,9 @@ const Modal: FC<ModalProps> = ({
   content,
   onCancel,
   onConfirm,
-  showCloseButton = false,
+  showCancelButton,
+  showConfirmButton,
+  showCloseButton,
 }) => {
   const { isOpen } = useModalStateContext();
   const { onChangeOpen } = useModalActionsContext();
@@ -51,25 +55,29 @@ const Modal: FC<ModalProps> = ({
           <DialogTitle />
         </VisuallyHidden.Root>
       )}
-      <DialogContent showCloseButton={showCloseButton}>
+      <DialogContent className="w-fit" showCloseButton={showCloseButton}>
         {content}
         <DialogFooter>
           <div className="w-full grid grid-cols-2 gap-x-[8px]">
-            <Button
-              tabIndex={-1}
-              onClick={onCancel}
-              variant="outline"
-              className="h-[46px] border-red-500"
-            >
-              취소
-            </Button>
-            <Button
-              onClick={onConfirm}
-              variant="default"
-              className="border-red-500 bg-red-500 text-white h-[46px] hover:bg-red-600"
-            >
-              확인
-            </Button>
+            {showCancelButton && (
+              <Button
+                tabIndex={-1}
+                onClick={onCancel}
+                variant="outline"
+                className="h-[46px] border-red-500"
+              >
+                취소
+              </Button>
+            )}
+            {showConfirmButton && (
+              <Button
+                onClick={onConfirm}
+                variant="default"
+                className="border-red-500 bg-red-500 text-white h-[46px] hover:bg-red-600"
+              >
+                확인
+              </Button>
+            )}
           </div>
         </DialogFooter>
         <VisuallyHidden.Root>

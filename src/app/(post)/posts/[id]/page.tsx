@@ -4,36 +4,11 @@
  */
 
 import Empty from "@/components/common/empty";
-import { Countries } from "@/components/home/contents/types";
 import PostTitle from "@/components/posts/post-title";
-import { client } from "@/constant/mongo";
-
-interface Contents {
-  title: string;
-  id: number;
-  contents: string;
-  country: Countries;
-}
-
-const getData = async (id: string) => {
-  try {
-    await client.connect();
-
-    const res = await client
-      .db("travel")
-      .collection("posts")
-      .findOne<Contents>({ id: parseInt(id) });
-
-    await client.close();
-
-    return res;
-  } catch (error) {
-    return undefined;
-  }
-};
+import { getPost } from "@/services/posts/get";
 
 const PostDetailPage = async ({ params }: { params: { id: string } }) => {
-  const data = await getData(params.id);
+  const data = await getPost(params.id);
 
   if (!data) {
     return (

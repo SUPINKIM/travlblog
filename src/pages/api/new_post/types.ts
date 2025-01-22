@@ -1,7 +1,3 @@
-export interface ResponseData {
-  message: string;
-}
-
 export interface RequestData {
   title: string;
   country: string;
