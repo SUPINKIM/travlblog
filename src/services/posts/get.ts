@@ -1,4 +1,5 @@
 import { client } from "@/constant/mongo";
+
 import { Contents } from "./types";
 
 export const getPost = async (id: string): Promise<Contents | null> => {
