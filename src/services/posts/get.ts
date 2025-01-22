@@ -1,6 +1,4 @@
-import { API_ENDPOINTS } from "@/constant/api";
 import { client } from "@/constant/mongo";
-import { ResponseData } from "@/pages/api/types";
 import { Contents } from "./types";
 
 export const getPost = async (id: string): Promise<Contents | null> => {
