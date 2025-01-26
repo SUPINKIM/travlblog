@@ -3,9 +3,9 @@
  * @link [https://nextjs.org/docs/app/building-your-application/optimizing/metadata]
  */
 
+import { getPost } from "@/apis/posts/get";
 import Empty from "@/components/common/empty";
 import PostTitle from "@/components/posts/post-title";
-import { getPost } from "@/services/posts/get";
 
 const PostDetailPage = async ({ params }: { params: { id: string } }) => {
   const data = await getPost(params.id);
@@ -18,8 +18,8 @@ const PostDetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="w-full h-full flex justify-center p-[24px] gap-[8px] flex-col items-center">
-      <PostTitle title={data.title} />
-      <div className="text-[14px] content max-w-[800px] mt-[32px] grid grid-cols-1 gap-[12px] justify-center p-[24px] bg-gray-50 rounded-[8px]">
+      <PostTitle title={data.title} thumbnail={data.thumbnail} />
+      <div className="text-[15px] content max-w-[800px] mt-[16px] grid grid-cols-1 gap-[12px] justify-center p-[24px] bg-gray-50 rounded-[8px]">
         <div dangerouslySetInnerHTML={{ __html: data.contents }} />
       </div>
     </div>
