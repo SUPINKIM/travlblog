@@ -1,6 +1,6 @@
 export enum Countries {
-  AUSTRALIA = "Australia",
-  KOTA_KINABALU = "Kota Kinabalu",
+  AUSTRALIA = "australia",
+  KOTA_KINABALU = "kotakinabalu",
   HONG_KONG = "HongKong",
   JAPAN = "Japan",
   ENGLAND = "England",

@@ -9,6 +9,7 @@ import TripPostSelect from "@/components/home/contents/trip-posts/trip-post-sele
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { toolbarOptions } from "@/constant/editor";
+import { Countries } from "@/types";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -19,7 +20,7 @@ const WritePosts = () => {
 
   const { toast } = useToast();
 
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState<string>("");
 
   const handleTemporarySave = () => {
     // TODO : 임시저장 API 호출
@@ -90,7 +91,9 @@ const WritePosts = () => {
         <div className="h-px w-full bg-gray-100" />
       </div>
       <div className="flex items-center justify-between flex-wrap gap-y-[20px]">
-        <TripPostSelect setCountry={setCountry} />
+        <TripPostSelect
+          setCountry={(value) => setCountry(value as Countries)}
+        />
         <div className="flex items-center gap-x-[8px] justify-end">
           <Button
             disabled
