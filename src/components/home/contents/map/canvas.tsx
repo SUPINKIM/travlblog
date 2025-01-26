@@ -30,7 +30,7 @@ const MapCanvas: FC<MapCanvasProps> = ({ selectedCountry }) => {
         mapContainerStyle={{ height: "100%", width: "100%" }}
         mapContainerClassName="h-full"
         center={
-          selectedCountry ? location[selectedCountry] : location.Australia
+          selectedCountry ? location[selectedCountry] : location.australia
         }
       >
         {selectedCountry && (
