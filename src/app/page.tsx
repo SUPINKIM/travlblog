@@ -5,7 +5,6 @@ import { getPlaiceholder } from "plaiceholder";
 
 import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
 import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
-import WorldMap from "@/components/home/contents/map";
 import TripPosts from "@/components/home/contents/trip-posts";
 import Header from "@/components/home/header";
 
@@ -28,11 +27,10 @@ export default async function Home() {
   return (
     <div className="w-full grid grid-cols-1 px-[16px] py-[32px]">
       <Header />
-      {/* <div className="mt-[12px] flex items-center gap-[12px] flex-wrap"></div> */}
       <div className="mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
         <ImageCarousel images={newImages} />
         <TripPosts />
-        <WorldMap />
+        {/* <WorldMap /> */}
       </div>
     </div>
   );

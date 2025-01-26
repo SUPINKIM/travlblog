@@ -1,4 +1,4 @@
-import { Countries } from "../types";
+import { Countries } from "@/types";
 
 export interface Location {
   lat: number;

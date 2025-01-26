@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { Countries } from "../types";
+import { Countries } from "@/types";
+
 import MapCanvas from "./canvas";
 import FlagButton from "./flag-button";
 

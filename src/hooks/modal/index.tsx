@@ -6,6 +6,9 @@ import { ActionsContext, StateContext } from "@/context/modal";
 interface OpenModalParams {
   onConfirm?: () => void;
   onCancel?: () => void;
+  showConfirmButton?: boolean;
+  showCloseButton?: boolean;
+  showCancelButton?: boolean;
   children: ReactNode;
 }
 
@@ -35,19 +38,27 @@ export const useModal = () => {
   const { modalRef } = useModalStateContext();
   const { onChangeOpen } = useModalActionsContext();
 
-  const open = ({ onConfirm, onCancel, children }: OpenModalParams) => {
+  const open = ({
+    onConfirm,
+    onCancel,
+    children,
+    ...rest
+  }: OpenModalParams) => {
     onChangeOpen(true);
 
     const promise = new Promise<boolean>((resolve) => {
       modalRef.current = (
         <Modal
+          {...rest}
           onConfirm={() => {
             onConfirm?.();
             resolve(true);
+            close();
           }}
           onCancel={() => {
             onCancel?.();
             resolve(false);
+            close();
           }}
           content={children}
         />

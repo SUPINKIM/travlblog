@@ -8,18 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Countries } from "../types";
+import { Countries } from "@/types";
 
 interface TripPostSelectProps {
-  setCountry: Dispatch<SetStateAction<string>>;
+  setCountry: Dispatch<SetStateAction<Countries>>;
 }
 
 const TripPostSelect: FC<TripPostSelectProps> = ({ setCountry }) => {
   return (
-    <Select onValueChange={setCountry}>
+    <Select onValueChange={(value) => setCountry(value as Countries)}>
       <SelectTrigger className="max-w-[200px] h-[42px]">
-        <SelectValue placeholder="country" />
+        <SelectValue placeholder={Countries.KOTA_KINABALU} />
       </SelectTrigger>
       <SelectContent>
         {Object.values(Countries).map((country) => (

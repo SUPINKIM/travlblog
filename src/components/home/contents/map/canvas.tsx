@@ -3,7 +3,8 @@
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { FC, useLayoutEffect, useState } from "react";
 
-import { Countries } from "../types";
+import { Countries } from "@/types";
+
 import { location, locationTitle } from "./types";
 
 interface MapCanvasProps {
@@ -29,7 +30,7 @@ const MapCanvas: FC<MapCanvasProps> = ({ selectedCountry }) => {
         mapContainerStyle={{ height: "100%", width: "100%" }}
         mapContainerClassName="h-full"
         center={
-          selectedCountry ? location[selectedCountry] : location.Australia
+          selectedCountry ? location[selectedCountry] : location.australia
         }
       >
         {selectedCountry && (

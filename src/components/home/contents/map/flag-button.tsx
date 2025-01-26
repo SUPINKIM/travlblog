@@ -4,8 +4,7 @@ import { FC } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-import { Countries } from "../types";
+import { Countries } from "@/types";
 
 interface FlagButtonProps {
   selectedCountry?: Countries;
