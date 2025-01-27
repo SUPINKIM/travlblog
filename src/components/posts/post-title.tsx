@@ -37,7 +37,7 @@ const PostTitle: FC<PostTitleProps> = ({ title, thumbnail }) => {
         ref={titleRef}
         className={cn(
           "relative flex items-center justify-center z-1 w-full rounded-[12px]",
-          thumbnail ? "sm:h-[240px] h-[160px]" : "h-fit"
+          thumbnail ? "sm:h-[280px] h-[160px]" : "h-fit"
         )}
       >
         <p
