@@ -43,7 +43,7 @@ const ImageCarouselItem: FC<ImageCarouselItemProps> = ({
   return (
     <div
       //onClick={handleClickImage}
-      className="border h-[280px] cursor-pointer w-[320px] border-gray-100 relative rounded-[8px]"
+      className="border h-[280px] cursor-pointer w-[300px] border-gray-100 relative rounded-[8px]"
     >
       <Image
         className="rounded-[8px]"

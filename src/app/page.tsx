@@ -5,6 +5,7 @@ import { getPlaiceholder } from "plaiceholder";
 
 import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
 import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
+import NewPosts from "@/components/home/contents/new-posts";
 import TripPosts from "@/components/home/contents/trip-posts";
 import Header from "@/components/home/header";
 
@@ -29,6 +30,7 @@ export default async function Home() {
       <Header />
       <div className="mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
         <ImageCarousel images={newImages} />
+        <NewPosts />
         <TripPosts />
         {/* <WorldMap /> */}
       </div>

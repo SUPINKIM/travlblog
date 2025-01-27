@@ -38,7 +38,7 @@ const TripPosts = () => {
   }, [country]);
 
   return (
-    <>
+    <div className="border-t border-gray-200 py-[8px]">
       <div className="py-[12px]">
         <div className="flex gap-[8px] justify-between flex-wrap">
           <TripPostSelect setCountry={setCountry} />
@@ -56,7 +56,7 @@ const TripPosts = () => {
           <TripPostCards list={list} />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
