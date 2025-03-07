@@ -5,6 +5,8 @@ import Link from "next/link";
 import LinkButton from "@/components/common/link-button";
 import { Button } from "@/components/ui/button";
 
+import Visitor from "./visitor";
+
 const Header = () => {
   return (
     <div className="flex w-full items-center justify-between flex-wrap gap-[8px]">
@@ -18,6 +20,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex items-center justify-end gap-[6px]">
+        <Visitor />
         <Link href="/videos">
           <Button variant="ghost" className="h-[42px] flex gap-[4px]">
             <VideoIcon width={18} height={18} />
