@@ -17,6 +17,6 @@ export const updateVisitor = async () => {
   } catch (e) {
     console.error(e);
   } finally {
-    client.close();
+    // client.close();
   }
 };
