@@ -1,4 +1,4 @@
-import { NotionLogoIcon, VideoIcon } from "@radix-ui/react-icons";
+import { Link2Icon, VideoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,10 +25,10 @@ const Header = () => {
           </Button>
         </Link>
         <LinkButton
-          link="https://cut-decade-d21.notion.site/6ad8b5d74c83429eaa1c5b45795c59f7?pvs=4"
+          link="https://my.surfit.io/w/1555709893"
           label={
             <Button variant="ghost" className="h-[42px]">
-              <NotionLogoIcon height={18} width={18} />
+              <Link2Icon height={18} width={18} />
             </Button>
           }
         />

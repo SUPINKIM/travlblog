@@ -54,7 +54,7 @@ const PostTitle: FC<PostTitleProps> = ({ title, thumbnail }) => {
               src={thumbnail}
               alt="header-image"
               fill
-              className="object-fill opacity-60 rounded-[12px]"
+              className="object-fill opacity-40 rounded-[12px]"
             />
             <div className="size-full bg-gray-400 rounded-[12px]" />
           </div>

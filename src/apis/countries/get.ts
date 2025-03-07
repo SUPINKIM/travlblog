@@ -15,7 +15,8 @@ export const getListByCountry = async ({ country }: RequestParams) => {
       .toArray();
 
     return res;
-  } catch (error) {
+  } catch (err) {
+    console.error(err);
     return [];
   }
 };
