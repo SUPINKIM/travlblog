@@ -20,7 +20,7 @@ const POST = async (params: RequestData): Promise<{ save: boolean }> => {
     await client.close();
 
     return { save: true };
-  } catch (error) {
+  } catch (_) {
     return { save: false };
   }
 };
