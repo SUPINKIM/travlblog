@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { FC } from "react";
 
 import Empty from "@/components/common/empty";
@@ -13,13 +16,18 @@ const TripPostCards: FC<TripPostCardsProps> = ({ list }) => {
   return (
     <>
       {list.map(({ id, imageUrl, title, subTitle }) => (
-        <PostCard
+        <motion.div
           key={id}
-          id={id}
-          imageUrl={imageUrl}
-          title={title}
-          subTitle={subTitle}
-        />
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+        >
+          <PostCard
+            id={id}
+            imageUrl={imageUrl}
+            title={title}
+            subTitle={subTitle}
+          />
+        </motion.div>
       ))}
       {!list.length && (
         <Card className="h-[270px] border-none w-full flex items-center justify-center text-center">
