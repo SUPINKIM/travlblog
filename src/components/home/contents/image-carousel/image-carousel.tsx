@@ -40,7 +40,7 @@ const ImageCarousel = ({ images }: { images: Array<Image> }) => {
     <ImageCarouselProvider>
       <div className="select-none">
         <Carousel
-          className="py-[16px] border-b border-gray-200 w-full relative z-0"
+          className="py-[24px] w-full relative z-0"
           opts={{
             align: "start",
             loop: true,

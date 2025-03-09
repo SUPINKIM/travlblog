@@ -18,7 +18,7 @@ const TripPostSelect: FC<TripPostSelectProps> = ({ setCountry }) => {
   return (
     <Select onValueChange={(value) => setCountry(value as Countries)}>
       <SelectTrigger className="max-w-[200px] h-[42px]">
-        <SelectValue placeholder={Countries.KOTA_KINABALU} />
+        <SelectValue placeholder="select the country..." />
       </SelectTrigger>
       <SelectContent>
         {Object.values(Countries).map((country) => (
