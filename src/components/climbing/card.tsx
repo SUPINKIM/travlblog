@@ -24,7 +24,7 @@ const ClimbingCard: FC<ClimbingCardProps> = ({ imageUrl, title, subTitle }) => {
               height={100}
               src={imageUrl}
               alt={title}
-              className="w-full h-[180px] object-cover"
+              className="w-full h-[180px] object-cover bg-gray-50"
             />
           </CardContent>
         )}
