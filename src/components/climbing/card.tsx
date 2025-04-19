@@ -12,7 +12,7 @@ interface ClimbingCardProps {
 
 const ClimbingCard: FC<ClimbingCardProps> = ({ imageUrl, title, subTitle }) => {
   return (
-    <motion.div drag>
+    <motion.div>
       <Card className="w-[380px] h-fit">
         {/* 이름 */}
         <CardHeader className="font-medium text-[15px]">{title}</CardHeader>
