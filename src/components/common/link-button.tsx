@@ -24,8 +24,11 @@ const LinkButton: FC<LinkButtonProps> = ({
   };
 
   return (
-    <div className={cn("flex items-center", className)}>
-      <div onClick={!isShowArrowButton ? handleClick : undefined}>{label}</div>
+    <div
+      className={cn("flex items-center", className)}
+      onClick={!isShowArrowButton ? handleClick : undefined}
+    >
+      <div>{label}</div>
       {isShowArrowButton && (
         <div className="pr-[20px]">
           <Button onClick={handleClick} variant="outline" size="icon">

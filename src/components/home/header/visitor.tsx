@@ -16,7 +16,7 @@ const Visitor = () => {
   }, [count, setCount]);
 
   return (
-    <div className="mr-[8px] shrink-0 text-[13px] bg-gray-100 rounded-[8px] p-[12px]">
+    <div className="mr-[8px] shrink-0 text-[13px] bg-gray-100 rounded-[8px] p-[8px]">
       <p>🫰 누적 방문자 수 : {count}</p>
     </div>
   );
