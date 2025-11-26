@@ -6,6 +6,7 @@ import { getPlaiceholder } from "plaiceholder";
 import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
 import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
 import NewPosts from "@/components/home/contents/new-posts";
+import Player from "@/components/home/contents/player";
 import TripPosts from "@/components/home/contents/trip-posts";
 import Header from "@/components/home/header";
 
@@ -28,7 +29,8 @@ export default async function Home() {
   return (
     <div className="w-full grid grid-cols-1 px-[16px] py-[32px]">
       <Header />
-      <div className="mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
+      <div className="relative mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
+        <Player />
         <ImageCarousel images={newImages} />
         <NewPosts />
         <TripPosts />
