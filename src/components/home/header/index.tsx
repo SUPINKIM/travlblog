@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/menubar";
 
 import { Nav } from "./constants";
+import Visitor from "./visitor";
 
 const Header = () => {
   return (
@@ -25,7 +26,7 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-x-[8px]">
-        {/* <Visitor /> */}
+        <Visitor />
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger className="flex gpa-x-[4px] cursor-pointer">
