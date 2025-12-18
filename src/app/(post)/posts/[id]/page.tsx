@@ -7,8 +7,13 @@ import { getPost } from "@/apis/posts/get";
 import Empty from "@/components/common/empty";
 import PostTitle from "@/components/posts/post-title";
 
-const PostDetailPage = async ({ params }: { params: { id: string } }) => {
-  const data = await getPost(params.id);
+const PostDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  const data = await getPost(id);
 
   if (!data) {
     return (

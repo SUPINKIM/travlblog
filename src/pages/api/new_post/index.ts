@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { client } from "@/constant/mongo";
-
-import { ResponseData } from "../types";
-import { RequestData } from "./types";
+import { ResponseData } from "@/types";
+import { RequestData } from "@/types/api/new_post";
 
 const POST = async (params: RequestData): Promise<{ save: boolean }> => {
   try {

@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useRef, useState } from "react";
 
-import TripPostSelect from "@/components/home/contents/trip-posts/trip-post-select";
+import TripPostSelect from "@/components/travel/contents/trip-posts/trip-post-select";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { toolbarOptions } from "@/constant/editor";

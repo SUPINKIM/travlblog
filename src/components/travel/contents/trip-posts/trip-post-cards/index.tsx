@@ -6,7 +6,7 @@ import { FC } from "react";
 import Empty from "@/components/common/empty";
 import PostCard from "@/components/common/post-card";
 import { Card, CardContent } from "@/components/ui/card";
-import { ListByCountries } from "@/pages/api/list_by_countries/types";
+import { ListByCountries } from "@/types/api/list_by_countries";
 
 interface TripPostCardsProps {
   list: Array<ListByCountries>;
