@@ -1,0 +1,36 @@
+import { CAROUSEL_ITEMS } from "@/components/travel/contents/image-carousel/constant";
+import ImageCarousel from "@/components/travel/contents/image-carousel/image-carousel";
+import NewPosts from "@/components/travel/contents/new-posts";
+import Player from "@/components/travel/contents/player";
+import TripPosts from "@/components/travel/contents/trip-posts";
+import Header from "@/components/travel/header";
+
+export default async function Travel() {
+  const newImages = [...CAROUSEL_ITEMS];
+
+  // const base64s = CAROUSEL_ITEMS.map(async (item) => {
+  //   const buffer = await readFile(path.join("./public", item.imageUrl));
+
+  //   const { base64 } = await getPlaiceholder(buffer, { size: 10 });
+  //   return { ...item, blurDataURL: base64 };
+  // });
+
+  // const values = await Promise.all(base64s);
+
+  // values.forEach((value, idx) => {
+  //   newImages[idx] = value;
+  // });
+
+  return (
+    <div className="w-full grid grid-cols-1 px-[16px] py-[32px]">
+      <Header />
+      <div className="relative mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
+        <Player />
+        <ImageCarousel images={newImages} />
+        <NewPosts />
+        <TripPosts />
+        {/* <WorldMap /> */}
+      </div>
+    </div>
+  );
+}

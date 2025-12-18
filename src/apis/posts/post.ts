@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from "@/constant/api";
-import { RequestData } from "@/pages/api/new_post/types";
+import { RequestData } from "@/types/api/new_post";
 
 export const createPost = async ({
   title,

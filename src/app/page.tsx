@@ -1,40 +1,10 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-import { getPlaiceholder } from "plaiceholder";
-
-import { CAROUSEL_ITEMS } from "@/components/home/contents/image-carousel/constant";
-import ImageCarousel from "@/components/home/contents/image-carousel/image-carousel";
-import NewPosts from "@/components/home/contents/new-posts";
-import Player from "@/components/home/contents/player";
-import TripPosts from "@/components/home/contents/trip-posts";
-import Header from "@/components/home/header";
+import Buttons from "@/components/home/buttons";
 
 export default async function Home() {
-  const newImages = [...CAROUSEL_ITEMS];
-
-  const base64s = CAROUSEL_ITEMS.map(async (item) => {
-    const buffer = await readFile(path.join("./public", item.imageUrl));
-
-    const { base64 } = await getPlaiceholder(buffer, { size: 10 });
-    return { ...item, blurDataURL: base64 };
-  });
-
-  const values = await Promise.all(base64s);
-
-  values.forEach((value, idx) => {
-    newImages[idx] = value;
-  });
-
   return (
-    <div className="w-full grid grid-cols-1 px-[16px] py-[32px]">
-      <Header />
-      <div className="relative mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
-        <Player />
-        <ImageCarousel images={newImages} />
-        <NewPosts />
-        <TripPosts />
-        {/* <WorldMap /> */}
+    <div className="h-screen w-full flex justify-center items-center bg-slate-950">
+      <div className="py-[10px] flex items-center justify-center">
+        <Buttons />
       </div>
     </div>
   );

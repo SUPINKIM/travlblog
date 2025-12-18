@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { getListByCountry } from "@/apis/countries/get";
-
-import { ResponseData } from "../types";
-import { ListByCountries } from "./types";
+import { ResponseData } from "@/types";
+import { ListByCountries } from "@/types/api/list_by_countries";
 
 const GET = (country: string) => getListByCountry({ country });
 

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { ListByCountries } from "@/pages/api/list_by_countries/types";
-import { ResponseData } from "@/pages/api/types";
+import { ListByCountries } from "@/types/api/list_by_countries";
+import { ResponseData } from "@/types";
 import { Countries } from "@/types";
 
 import TripPostCards from "./trip-post-cards";
