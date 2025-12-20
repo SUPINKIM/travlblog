@@ -12,21 +12,21 @@ interface FloatingElement {
 }
 
 interface FloatingElementsProps {
-  elements: readonly FloatingElement[] | FloatingElement[];
+  elements: readonly FloatingElement[];
 }
 
 export function FloatingElements({ elements }: FloatingElementsProps) {
   return (
     <>
-      {elements.map((el, i) => (
+      {elements.map((el) => (
         <motion.div
-          key={i}
+          key={el.icon}
           animate={{ y: el.direction === "down" ? [0, 20, 0] : [0, -20, 0] }}
           transition={{ duration: el.duration, repeat: Infinity }}
           className="absolute"
           style={el.position}
         >
-          <PixelIcon name={el.icon} size="xl" className="text-cyan-400/60" />
+          <PixelIcon name={el.icon} size="xl" className="text-blue-400/60" />
         </motion.div>
       ))}
     </>

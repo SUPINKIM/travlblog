@@ -26,7 +26,7 @@ export function PixelProgress({
       <div className="flex justify-between text-xs items-center">
         <span className="flex items-center gap-2">
           {icon && (
-            <PixelIcon name={icon} size="sm" className="text-cyan-400" />
+            <PixelIcon name={icon} size="sm" className="text-gray-400" />
           )}
           {label}
         </span>

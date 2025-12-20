@@ -39,7 +39,7 @@ export const FAVORITES = [
   { icon: "plane", label: "여행", desc: "새로운 곳을 탐험하는 것" },
   { icon: "gaming", label: "게임", desc: "픽셀 아트 & 인디 게임" },
   { icon: "code", label: "코딩", desc: "아이디어를 현실로" },
-  { icon: "retro-camera-solid", label: "사진", desc: "순간을 기록하기" },
+  { icon: "book-heart-solid", label: "책", desc: "틈틈이, 자주, 많이 읽기" },
 ] as const;
 
 export const SOCIAL_LINKS = [

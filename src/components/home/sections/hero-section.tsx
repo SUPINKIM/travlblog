@@ -60,9 +60,6 @@ export function HeroSection() {
         <h1 className="text-2xl md:text-4xl text-cyan-400 mb-4">
           <PixelTyping text="HELLO, WORLD!" />
         </h1>
-        <p className="text-sm md:text-base text-slate-400 mb-4">
-          <PixelTyping text="저는 수빈입니다" delay={0.8} />
-        </p>
 
         {/* 스탯 미니 바 */}
         <motion.div

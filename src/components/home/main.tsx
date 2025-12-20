@@ -36,13 +36,13 @@ export default function HomePage() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 1 + i * 0.1 }}
             whileHover={{ scale: 1.2, x: 4 }}
-            className="w-10 h-10 bg-slate-800 border-2 border-slate-600 flex items-center justify-center hover:border-cyan-400 transition-colors"
+            className="w-10 h-10 bg-slate-800 border-2 border-slate-600 flex items-center justify-center hover:border-blue-500 transition-colors"
             title={link.label}
           >
             <PixelIcon
               name={link.icon}
               size="md"
-              className="text-slate-400 hover:text-cyan-400"
+              className="text-slate-400 hover:text-blue-400"
             />
           </motion.a>
         ))}
@@ -64,6 +64,7 @@ export default function HomePage() {
               <a
                 key={link.label}
                 href={link.href}
+                target="_blank"
                 className="w-10 h-10 bg-slate-800 border-2 border-slate-600 flex items-center justify-center hover:border-cyan-400 transition-colors"
               >
                 <PixelIcon
@@ -81,7 +82,7 @@ export default function HomePage() {
               <span className="text-xs text-slate-600">MADE WITH LOVE</span>
               <PixelIcon name="heart" size="sm" className="text-pink-400" />
             </div>
-            <p className="text-xs text-slate-600">© 2025 SUBIN</p>
+            <p className="text-xs text-slate-600">© 2025 SUPIN</p>
           </div>
         </div>
       </footer>

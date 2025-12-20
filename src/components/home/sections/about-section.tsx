@@ -28,9 +28,7 @@ export function AboutSection() {
               />
               <span>
                 안녕하세요!{" "}
-                <span className="text-yellow-400">
-                  React Native 개발자 수빈
-                </span>
+                <span className="text-yellow-400">프론트엔드 개발자 수빈</span>
                 입니다.
               </span>
             </p>
@@ -78,13 +76,13 @@ export function AboutSection() {
           </div>
 
           {/* 스탯 서머리 */}
-          <div className="mt-8 pt-6 border-t-2 border-slate-700 grid grid-cols-3 gap-4 text-center items-end">
+          <div className="mt-8 pt-6 px-4 border-t-2 border-slate-700 flex flex-wrap justify-between gap-6 text-center items-end">
             <div>
               <div className="inline-flex items-center gap-2">
                 <PixelIcon
-                  name="calendar"
-                  size="lg"
-                  className="text-cyan-400 mx-auto mb-2"
+                  name="calender"
+                  size="sm"
+                  className="text-yellow-400 mx-auto mb-2"
                 />
                 <p className="text-xs text-slate-500 pb-2">EXPERIENCE</p>
               </div>
@@ -94,7 +92,7 @@ export function AboutSection() {
               <div className="inline-flex gap-2 items-center">
                 <PixelIcon
                   name="folder"
-                  size="lg"
+                  size="sm"
                   className="text-pink-400 mx-auto mb-2"
                 />
                 <p className="text-xs text-slate-500 pb-2">PROJECTS</p>
@@ -104,9 +102,9 @@ export function AboutSection() {
             <div>
               <div className="inline-flex gap-2 items-center">
                 <PixelIcon
-                  name="coffee"
-                  size="lg"
-                  className="text-yellow-400 mx-auto mb-2"
+                  name="headphones-solid"
+                  size="sm"
+                  className="text-orange-400 mx-auto mb-2"
                 />
                 <p className="text-xs text-slate-500 pb-2">COFFEE</p>
               </div>
