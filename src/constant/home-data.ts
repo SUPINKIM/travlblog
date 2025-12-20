@@ -8,7 +8,7 @@ export const PROJECTS = [
   {
     icon: "seedlings-solid",
     name: "올팜",
-    desc: "React Native 농장 게임",
+    desc: "온라인으로 작물을 키워 실제로 받는 앱테크 서비스",
     year: "2025",
     link: "#",
   },
@@ -17,7 +17,7 @@ export const PROJECTS = [
     name: "오늘의 운세",
     desc: "카드 뽑기 게임",
     year: "2025",
-    link: "#",
+    link: "https://supinkim.github.io/today-fortune/",
   },
   {
     icon: "gaming",
@@ -29,7 +29,7 @@ export const PROJECTS = [
   {
     icon: "shopping-cart",
     name: "신상마켓",
-    desc: "커머스 웹 개발",
+    desc: "B2B 동대문 도소매 패션 커머스 웹 개발",
     year: "2023",
     link: "#",
   },
@@ -61,7 +61,7 @@ export const AVATAR_PIXELS = [
 export const FLOATING_HERO_ICONS = [
   { icon: "star", position: { top: "5rem", left: "5rem" }, duration: 3 },
   {
-    icon: "rocket",
+    icon: "startups",
     position: { top: "10rem", right: "8rem" },
     duration: 2.5,
     direction: "down" as const,
@@ -69,14 +69,21 @@ export const FLOATING_HERO_ICONS = [
   { icon: "save", position: { bottom: "10rem", left: "8rem" }, duration: 2 },
   { icon: "heart", position: { top: "15rem", left: "20rem" }, duration: 2.8 },
   {
-    icon: "zap",
+    icon: "comment-quote",
     position: { bottom: "15rem", right: "15rem" },
     duration: 3.2,
     direction: "down" as const,
   },
 ] as const;
 
-export const BG_ICONS = ["plane", "map", "globe", "camera", "compass"] as const;
+export const BG_ICONS = [
+  "plane",
+  "globe-americas-solid",
+  "globe",
+  "retro-camera",
+  "plane-solid",
+  "location-pin-solid",
+] as const;
 
 // 섹션 타이틀 아이콘
 export const SECTION_ICONS = {

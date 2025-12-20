@@ -28,7 +28,9 @@ export function AboutSection() {
               />
               <span>
                 안녕하세요!{" "}
-                <span className="text-yellow-400">프론트엔드 개발자 수빈</span>
+                <span className="text-yellow-400">
+                  프론트엔드 개발자 김수빈
+                </span>
                 입니다.
               </span>
             </p>

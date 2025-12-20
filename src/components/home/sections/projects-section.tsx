@@ -27,6 +27,10 @@ export function ProjectsSection() {
               viewport={{ once: true }}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="border-4 border-pink-400 bg-slate-800 p-6 shadow-[8px_8px_0_#ec4899] cursor-pointer hover:bg-slate-700 transition-colors relative group"
+              onClick={() => {
+                if (project.link === "#") return;
+                window.open(project.link);
+              }}
             >
               {/* 호버 시 깜빡이는 효과 */}
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
