@@ -1,7 +1,9 @@
 import "./globals.css";
+import "@hackernoon/pixel-icon-library/fonts/iconfont.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Press_Start_2P } from "next/font/google";
 
 import Error from "@/components/common/error";
 import { VisitorProvider } from "@/hooks/visitor";
@@ -9,9 +11,15 @@ import { VisitorProvider } from "@/hooks/visitor";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Supin's trip blog",
-  description: "나만의 여행 블로그를 만들어보자",
+  title: "Supin's blog",
+  description: "나만의 블로그를 만들어보자",
 };
+
+const pixelFont = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pixel",
+});
 
 export default function RootLayout({
   children,
@@ -19,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={pixelFont.variable}>
       <body className={inter.className}>
         <Error>
           <VisitorProvider>
