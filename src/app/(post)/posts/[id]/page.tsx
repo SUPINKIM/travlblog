@@ -17,14 +17,14 @@ const PostDetailPage = async ({
 
   if (!data) {
     return (
-      <Empty className="text-[16px] mt-[64px] font-semibold text-center" />
+      <Empty className="text-base mt-16 font-semibold text-center" />
     );
   }
 
   return (
-    <div className="w-full h-full flex justify-center p-[24px] gap-[8px] flex-col items-center">
+    <div className="w-full flex justify-center p-6 gap-2 flex-col items-center">
       <PostTitle title={data.title} thumbnail={data.thumbnail} />
-      <div className="text-[15px] content max-w-[800px] mt-[16px] grid grid-cols-1 gap-[12px] justify-center p-[24px] bg-gray-50 rounded-[8px]">
+      <div className="text-sm content max-w-[800px] mt-4 grid grid-cols-1 gap-3 justify-center p-6 bg-surface-2 rounded-xl border border-border text-foreground">
         <div dangerouslySetInnerHTML={{ __html: data.contents }} />
       </div>
     </div>

@@ -7,8 +7,7 @@ const PostsLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="w-full h-full bg-white">
-      {/* <div>포스팅 목록입니다.</div> */}
+    <div className="w-full min-h-screen">
       <Navigator />
       <Toaster />
       {children}

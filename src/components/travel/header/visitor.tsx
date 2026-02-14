@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye } from "lucide-react";
 import { useEffect } from "react";
 
 import { useVisitorContext } from "@/hooks/visitor";
@@ -16,8 +17,9 @@ const Visitor = () => {
   }, [count, setCount]);
 
   return (
-    <div className="mr-[8px] shrink-0 text-[13px] bg-gray-100 rounded-[8px] p-[8px]">
-      <p>🫰 누적 방문자 수 : {count}</p>
+    <div className="inline-flex items-center gap-2 text-xs text-muted-foreground bg-surface-2 border border-border rounded-lg px-3 py-2">
+      <Eye size={12} />
+      <span>{count ?? "..."} visitors</span>
     </div>
   );
 };

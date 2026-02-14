@@ -1,7 +1,14 @@
 "use client";
 
 import { PixelIcon, PixelProgress, ScrollSection } from "@/components/home";
-import { SECTION_ICONS, SKILLS } from "@/constant/home-data";
+import { SKILLS } from "@/constant/home-data";
+
+const SECTION_ICONS = {
+  about: "user",
+  projects: "gamepad",
+  favorites: "heart",
+  travel: "plane",
+} as const;
 
 export function AboutSection() {
   return (
@@ -72,7 +79,6 @@ export function AboutSection() {
                 label={skill.name}
                 value={skill.value}
                 color={skill.color}
-                icon={skill.icon}
               />
             ))}
           </div>

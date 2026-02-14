@@ -1,9 +1,9 @@
 "use client";
 
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 
 import dynamic from "next/dynamic";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import TripPostSelect from "@/components/travel/contents/trip-posts/trip-post-select";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { toolbarOptions } from "@/constant/editor";
 import { Countries } from "@/types";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const WritePosts = () => {
   const [value, setValue] = useState("");
@@ -81,30 +81,33 @@ const WritePosts = () => {
   };
 
   return (
-    <div className="grid size-full grid-cols-1 px-[20px] gap-y-[20px]">
+    <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 gap-y-6">
       <div>
         <input
           ref={title}
-          className="w-full h-[46px] outline-none text-[20px]"
+          className="w-full bg-transparent border-none outline-none text-2xl font-bold text-foreground placeholder:text-muted-foreground/40 pb-4"
           placeholder="제목을 입력하세요"
         />
-        <div className="h-px w-full bg-gray-100" />
+        <div className="h-px w-full bg-border" />
       </div>
-      <div className="flex items-center justify-between flex-wrap gap-y-[20px]">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <TripPostSelect
           setCountry={(value) => setCountry(value as Countries)}
         />
-        <div className="flex items-center gap-x-[8px] justify-end">
+        <div className="flex items-center gap-2 justify-end">
           <Button
             disabled
             onClick={handleTemporarySave}
-            variant="destructive"
-            className="w-[100px] h-[42px]"
+            variant="outline"
+            className="h-9 px-4 text-xs"
           >
-            임시저장 하기
+            임시저장
           </Button>
-          <Button className="w-[100px] h-[42px]" onClick={handleSavePost}>
-            업로드하기
+          <Button
+            className="h-9 px-4 text-xs bg-brand-cyan text-background hover:bg-brand-cyan/90"
+            onClick={handleSavePost}
+          >
+            업로드
           </Button>
         </div>
       </div>

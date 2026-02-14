@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
+"use client";
+
+import { MapPin } from "lucide-react";
 import Image from "next/image";
 import { FC } from "react";
-
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
 interface ClimbingCardProps {
   imageUrl?: string;
@@ -12,26 +12,28 @@ interface ClimbingCardProps {
 
 const ClimbingCard: FC<ClimbingCardProps> = ({ imageUrl, title, subTitle }) => {
   return (
-    <motion.div>
-      <Card className="w-[380px] h-fit">
-        {/* 이름 */}
-        <CardHeader className="font-medium text-[15px]">{title}</CardHeader>
-        {/* 이미지 */}
-        {imageUrl && (
-          <CardContent className="w-full">
-            <Image
-              width={300}
-              height={100}
-              src={imageUrl}
-              alt={title}
-              className="w-full h-[180px] object-cover bg-gray-50"
-            />
-          </CardContent>
+    <div className="w-[340px] rounded-xl overflow-hidden bg-surface-2 border border-border hover:border-border/80 transition-all group">
+      {imageUrl && (
+        <div className="relative w-full h-[160px] overflow-hidden">
+          <Image
+            width={340}
+            height={160}
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      )}
+      <div className="p-4">
+        <h3 className="font-semibold text-foreground mb-2">{title}</h3>
+        {subTitle && (
+          <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+            <MapPin size={12} className="shrink-0 mt-0.5" />
+            {subTitle}
+          </p>
         )}
-        {/* 주소 */}
-        <CardFooter className="text-[13px]">{subTitle}</CardFooter>
-      </Card>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

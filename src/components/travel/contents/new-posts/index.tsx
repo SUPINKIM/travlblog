@@ -15,16 +15,18 @@ const NewPosts = async () => {
   await getPostLists();
 
   return (
-    <div className="pt-[6px] pb-[10px] grid grid-cols-1 gap-y-[16px]">
-      <p className="font-medium text-[16px]">최신 포스트가 올라왔어요! ✍️</p>
+    <div className="py-4">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-1.5 h-1.5 rounded-full bg-brand-rose animate-pulse" />
+        <h2 className="text-lg font-semibold">Latest Posts</h2>
+      </div>
 
-      <div className="flex flex-wrap gap-[12px]">
+      <div className="flex flex-wrap gap-3">
         {posts.map((post) => (
           <Link key={post.id} href={`posts/${post.id}`} className="w-fit">
             <PostCard title={post.title} />
           </Link>
         ))}
-        {/* <Link href="posts/3" className="w-fit"></Link> */}
       </div>
     </div>
   );

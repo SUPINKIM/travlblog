@@ -2,7 +2,7 @@ import Video from "@/components/videos";
 
 const Videos = () => {
   return (
-    <div className="bg-gray-950 h-[calc(100vh-84px)]">
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
       <Video />
     </div>
   );

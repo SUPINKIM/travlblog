@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion";
 
-import { AVATAR_PIXELS } from "@/constant/home-data";
+const AVATAR_PIXELS = [
+  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+  1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+] as const;
 
 interface PixelAvatarProps {
   size?: "sm" | "md" | "lg";

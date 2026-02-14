@@ -3,7 +3,14 @@
 import { motion } from "framer-motion";
 
 import { PixelIcon, ScrollSection } from "@/components/home";
-import { PROJECTS, SECTION_ICONS } from "@/constant/home-data";
+import { PROJECTS } from "@/constant/home-data";
+
+const SECTION_ICONS = {
+  about: "user",
+  projects: "gamepad",
+  favorites: "heart",
+  travel: "plane",
+} as const;
 
 export function ProjectsSection() {
   return (
@@ -49,7 +56,7 @@ export function ProjectsSection() {
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 bg-slate-700 border-2 border-pink-300 flex items-center justify-center">
                   <PixelIcon
-                    name={project.icon}
+                    name="gamepad"
                     size="lg"
                     className="text-pink-400"
                   />
