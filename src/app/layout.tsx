@@ -1,5 +1,4 @@
 import "./globals.css";
-import "@hackernoon/pixel-icon-library/fonts/iconfont.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
