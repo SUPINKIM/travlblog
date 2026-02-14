@@ -3,7 +3,14 @@
 import { motion } from "framer-motion";
 
 import { PixelIcon, ScrollSection } from "@/components/home";
-import { FAVORITES, SECTION_ICONS } from "@/constant/home-data";
+import { FAVORITES } from "@/constant/home-data";
+
+const SECTION_ICONS = {
+  about: "user",
+  projects: "gamepad",
+  favorites: "heart",
+  travel: "plane",
+} as const;
 
 export function FavoritesSection() {
   return (

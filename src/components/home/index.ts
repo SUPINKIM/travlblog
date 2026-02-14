@@ -1,6 +1,6 @@
-export { ScrollSection } from "./scroll-section";
-export { PixelTyping } from "./pixel-typing";
-export { PixelProgress } from "./pixel-progress";
+export { FloatingElements } from "./floating-elements";
 export { PixelAvatar } from "./pixel-avatar";
 export { PixelIcon } from "./pixel-icon";
-export { FloatingElements } from "./floating-elements";
+export { PixelProgress } from "./pixel-progress";
+export { PixelTyping } from "./pixel-typing";
+export { ScrollSection } from "./scroll-section";

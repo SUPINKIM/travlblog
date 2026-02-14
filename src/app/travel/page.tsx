@@ -1,35 +1,36 @@
+import Navigator from "@/components/common/navigator";
 import { CAROUSEL_ITEMS } from "@/components/travel/contents/image-carousel/constant";
 import ImageCarousel from "@/components/travel/contents/image-carousel/image-carousel";
 import NewPosts from "@/components/travel/contents/new-posts";
 import Player from "@/components/travel/contents/player";
 import TripPosts from "@/components/travel/contents/trip-posts";
-import Header from "@/components/travel/header";
 
 export default async function Travel() {
   const newImages = [...CAROUSEL_ITEMS];
 
-  // const base64s = CAROUSEL_ITEMS.map(async (item) => {
-  //   const buffer = await readFile(path.join("./public", item.imageUrl));
-
-  //   const { base64 } = await getPlaiceholder(buffer, { size: 10 });
-  //   return { ...item, blurDataURL: base64 };
-  // });
-
-  // const values = await Promise.all(base64s);
-
-  // values.forEach((value, idx) => {
-  //   newImages[idx] = value;
-  // });
-
   return (
-    <div className="w-full grid grid-cols-1 px-[16px] py-[32px]">
-      <Header />
-      <div className="relative mt-[20px] grid grid-cols-1 gap-y-[12px] w-full">
-        <Player />
-        <ImageCarousel images={newImages} />
-        <NewPosts />
-        <TripPosts />
-        {/* <WorldMap /> */}
+    <div className="min-h-screen">
+      <Navigator />
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        {/* Travel Hero */}
+        <div className="mb-10">
+          <p className="text-brand-amber text-sm font-medium mb-2 tracking-wide">
+            TRAVEL LOG
+          </p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3">
+            여행의 <span className="text-gradient">기록</span>
+          </h1>
+          <p className="text-muted-foreground max-w-lg">
+            세계 곳곳을 여행하며 보고, 느끼고, 경험한 것들을 담은 공간입니다.
+          </p>
+        </div>
+
+        <div className="relative grid grid-cols-1 gap-y-8 w-full">
+          <Player />
+          <ImageCarousel images={newImages} />
+          <NewPosts />
+          <TripPosts />
+        </div>
       </div>
     </div>
   );

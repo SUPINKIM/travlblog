@@ -5,7 +5,17 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { PixelIcon, ScrollSection } from "@/components/home";
-import { BG_ICONS, SECTION_ICONS } from "@/constant/home-data";
+
+const BG_ICONS = [
+  "plane", "globe-americas-solid", "globe", "retro-camera", "plane-solid", "location-pin-solid",
+] as const;
+
+const SECTION_ICONS = {
+  about: "user",
+  projects: "gamepad",
+  favorites: "heart",
+  travel: "plane",
+} as const;
 
 // 고정된 위치 배열
 const ICON_POSITIONS = [

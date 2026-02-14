@@ -11,8 +11,9 @@ import { VisitorProvider } from "@/hooks/visitor";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Supin's blog",
-  description: "나만의 블로그를 만들어보자",
+  title: "Supin's log",
+  description:
+    "Frontend Developer Supin Kim - Portfolio, Travel Blog & Life Log",
 };
 
 const pixelFont = Press_Start_2P({
@@ -27,11 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={pixelFont.variable}>
-      <body className={inter.className}>
+    <html lang="ko" className={pixelFont.variable}>
+      <body className={`${inter.className} bg-background text-foreground`}>
         <Error>
           <VisitorProvider>
-            <main className="min-w-[320px]">{children}</main>
+            <main className="min-w-[320px] min-h-screen">{children}</main>
           </VisitorProvider>
         </Error>
       </body>

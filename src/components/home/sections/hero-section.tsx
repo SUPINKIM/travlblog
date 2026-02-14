@@ -8,7 +8,14 @@ import {
   PixelIcon,
   PixelTyping,
 } from "@/components/home";
-import { FLOATING_HERO_ICONS } from "@/constant/home-data";
+
+const FLOATING_HERO_ICONS = [
+  { icon: "star", position: { top: "5rem", left: "5rem" }, duration: 3 },
+  { icon: "startups", position: { top: "10rem", right: "8rem" }, duration: 2.5, direction: "down" as const },
+  { icon: "save", position: { bottom: "10rem", left: "8rem" }, duration: 2 },
+  { icon: "heart", position: { top: "15rem", left: "20rem" }, duration: 2.8 },
+  { icon: "comment-quote", position: { bottom: "15rem", right: "15rem" }, duration: 3.2, direction: "down" as const },
+] as const;
 
 export function HeroSection() {
   return (

@@ -1,5 +1,6 @@
 "use client";
 
+import { Globe } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { ListByCountries } from "@/types/api/list_by_countries";
@@ -38,18 +39,22 @@ const TripPosts = () => {
   }, [country]);
 
   return (
-    <div className="py-[8px]">
-      <div className="py-[12px]">
-        <div className="flex gap-[8px] justify-between flex-wrap">
-          <TripPostSelect setCountry={setCountry} />
-        </div>
+    <div className="py-4">
+      <div className="flex items-center gap-2 mb-4">
+        <Globe size={16} className="text-brand-amber" />
+        <h2 className="text-lg font-semibold">Trip Posts</h2>
       </div>
-      <div className="flex pb-[8px] items-center min-[746px]:justify-start justify-center gap-x-[18px] w-full flex-wrap gap-y-[24px]">
+
+      <div className="mb-6">
+        <TripPostSelect setCountry={setCountry} />
+      </div>
+
+      <div className="flex pb-4 items-center min-[746px]:justify-start justify-center gap-x-4 w-full flex-wrap gap-y-4">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}
-              className="h-[270px] bg-gray-100 rounded-[24px] animate-pulse w-[340px]"
+              className="h-[270px] bg-surface-2 rounded-xl animate-pulse w-[340px]"
             />
           ))
         ) : (
