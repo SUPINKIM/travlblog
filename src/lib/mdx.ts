@@ -56,10 +56,9 @@ export function getAllPosts(category?: Category): PostMeta[] {
 
 export function getPostBySlug(slug: string): Post | null {
   const categories: Category[] = ["dev", "algorithm", "essay", "conference"];
-  const decodedSlug = decodeURIComponent(slug);
 
   for (const cat of categories) {
-    const filePath = path.join(CONTENT_DIR, cat, `${decodedSlug}.mdx`);
+    const filePath = path.join(CONTENT_DIR, cat, `${slug}.mdx`);
 
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf-8");
@@ -67,7 +66,7 @@ export function getPostBySlug(slug: string): Post | null {
       const frontmatter = data as PostFrontmatter;
 
       return {
-        slug: decodedSlug,
+        slug,
         content,
         title: frontmatter.title,
         date: frontmatter.date,
