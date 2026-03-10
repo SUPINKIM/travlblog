@@ -1,15 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Compass, Mountain, Pencil, Play, Plane } from "lucide-react";
+import { BookOpen, Pencil, Plane } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
+  { href: "/blog", label: "Blog", icon: BookOpen, adminOnly: false },
   { href: "/travel", label: "Travel", icon: Plane, adminOnly: false },
-  { href: "/videos", label: "Videos", icon: Play, adminOnly: false },
-  { href: "/climbing", label: "Climbing", icon: Mountain, adminOnly: false },
   { href: "/write", label: "Write", icon: Pencil, adminOnly: true },
 ] as const;
 

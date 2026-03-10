@@ -1,0 +1,84 @@
+---
+title: "vue-i18n-extract 활용한 번역 자동화하기"
+date: "2023-09-04"
+category: "dev"
+tags: ["FE", "i18n", "글로벌 대응", "번역"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/3c28d48d-06ad-4a29-8c58-59ff5b7b756f/image.jpeg"
+summary: "노가다 멈춰! (feat.vue-i18n-extract)"
+originalUrl: "https://velog.io/@qorgkr26/vue-i18n-extract-활용한-번역-자동화하기"
+---
+
+
+회사 서비스가 글로벌 유저를 대응하기 시작하면서 우리 서비스에 번역이 적용된 지 어언 1년이 넘어가고 있다. i18n 라이브러를 사용해서 대응하고 있는데(기술 스택이 vue라서 vue-i18n 사용) 초기에는 손수 번역 키 값을 만든 뒤 엑셀 시트에 추가하고 번역물을 열심히 json 파일에 복사 붙여넣기 하며 번역 작업을 했었다. (구구까까... 원시 시절 방법이다.) 
+
+하지만 이 방법은 너무나도 많은 휴먼 에러와 개발 비효율을 초래했기 때문에 그 다음 한단계 발전해 lokalise라는 라이브러리를 도입해서 키 관리를 하기 시작했다. 이 라이브러리가 추가됨에 따라 모바일과 공통으로 키값을 사용할 수 있었고, 엑셀 시트에 일일이 번역이 필요한 문구를 추가할 필요 없이 피그마에서 추출한 텍스트에 대해 4개 번역이 이뤄지면 필요한 번역본을 json 파일로 다운 받아 우리 프로젝트 json 파일을 최신화만 해주면 되어서 상당 부분의 비효율을 개선할 수 있었다..! 🙏
+
+하지만 매번 cmd + shift + F로 원하는 텍스트에 대한 번역 키 값을 json에서 찾고 다시 그 값을 소스코드에 붙여넣기 하는 일은 지루하고 귀찮고 짜증나는 일이 아닐 수 없었다. 😱 (우리는 이걸 전문 용어로 '노가다'라고 부른다.) 
+또 종종 개발 기간 중에는 존재하던 키 값이 QA 기간에 다른 번역 시트 쪽으로 이동되어 업데이트 된 json에 해당 키 값이 없어 키 값 그대로 화면에 노출되는 일도 생각보다 많았다.
+
+이런 상황이 매 프로젝트마다 반복 되다 보니 번역 때문에 고통 받는 시간을 조금이라도 줄이고 싶은 마음이 커졌다. 변수를 받거나 특정 번역 내 스타일 추가 때문에 텍스트 대치를 해야 하는 특수한 경우를 제외하면 거의 대부분은 하나의 단어로 번역이 나오기 떄문에 어느 정도 소스코드로 이를 자동활 할 수 있을 것이라는 생각이 들었다. 
+그래서 어떻게 하면 좋을까 고민을 하다가 i18n 키 값을 추출할 수 있는 여러 라이브러리들을 서치하게 되었다.
+
+**1. i18next 진영**
+- [i18next/i18next-scanner](https://github.com/i18next/i18next-scanner)
+- [i18next/i18next-parser](https://github.com/i18next/i18next-parser) 
+
+해당 라이브러리들은 i18next 진영에서 만든 라이브러리들인데 파서 객체를 만들어 타겟팅 된 소스코드에서 찾을 함수 리스트를 받아서 해당 함수 내에서 사용되고 있는 키를 추출, { key: value } 형태의 output 파일을 만들어준다.
+대부분 사용 후기를 보니 이렇게 output 파일을 만들고 이걸 구글 스프레드 시트와 연동해서 번역이 완료 되면 다시 소스 코드 내부에 번역 파일을 업데이트 해서 번역 자동화를 하는 방식으로 많이들 쓰고 있는 것 같았다.
+
+하지만 i18next는 리액트 진영에서 쓰는 라이브러리이고,(next) i18next-scanner를 써보니 함수 리스트에 'to'와 같은 i18n 객체의 메소드가 아닌 임의의 함수라도 리스트에 포함되면 파싱해서 키를 추출해주기 떄문에 뭔가 단순 스트링 파싱 역할이라는 느낌이 컸다. 그리고 제일 중요한 건, 우리는 키를 만드는 주체가 우리가 아니라 피그마에서 추출하기 때문에 디자이너가 키를 생성하고 그걸 클라이언트 팀 전체가 다 사용하는 방식이라서 현 상황에 그렇게 적합하다는 생각이 들진 않았다.
+
+**2. [vue-i18n-extract](https://github.com/Spittal/vue-i18n-extract)
+**
+
+최종적으로 택한 라이브러리는 vue-i18n-extract인데 vue 진영에서 명확하게 "공식이에요~!!" 한 건 아니지만 Vue i18n 문서에서 third part tooling으로 소개하고 있고 위클리 다운로드 수도 6만이 넘어서 꽤 사용할만하다고 생각해서 쓰게 되었다.
+https://kazupon.github.io/vue-i18n/guide/tooling.html#official-tooling
+
+일단 해당 라이브러리가 유용한 점이 missingKeys와 unusedKeys를 파악해서 알려주기 때문에 어떤 키를 안 쓰고 있고 어떤 키가 번역 파일에 없는데 소스 코드에서 사용되고 있는지 쉽게 알 수가 있어서 좋다. npx를 사용해 cli로 바로 돌려볼 수도 있지만 라이브러리를 설치하고 파일 내에 함수를 호출해서 사용할 수도 있다.
+
+```ts
+import VueI18NExtract from 'vue-i18n-extract';
+
+/** promise를 리턴한다. **/
+VueI18NExtract.createI18NReport({
+  vueFiles: './path/to/vue-files/**/*.?(js|vue)',
+  languageFiles: './path/to/language-files/*.?(json|yml|yaml|js)',
+}).then((res: VueI18NExtract.I18NReport) => {
+	// 분석 결과가 매개변수로 들어온다.
+})
+```
+
+나는 번역 해야 하는 단어 자체를 키로 사용한 다음 실제 번역 파일에는 해당 키가 없을 것이므로 분석이 완료되면 report 중 missingKeys만 추출해서 원래 번역 파일에서 내가 만든 키와 동일한 value를 찾아서 알맞은 번역 키로 읽어온 파일을 replace 해주고 완료되면 파일을 다시 저장해주는 방식으로 코드를 작성했다. 
+
+**[완성코드]**
+```ts
+
+	VueI18NExtract.createI18NReport({
+      // ... options
+	}).then(({ missingKeys }) => {
+		// missingKeys: 사용하고 있는데 번역 파일에 존재하지 않는 키 모음
+		const fileSet = new Set(missingKeys.map((key) => key.file));
+
+		fileSet.forEach((fileName) => {
+			if (!fileName) return;
+			
+			let f = fs.readFileSync(fileName, 'utf-8');
+            const missKeys = missingKeys.filter(({ file }) => file === fileName);
+
+			missKeys.forEach(({ path }) => {
+				const [originKey] = Object.entries(JSON.parse(realLangFile)).find(([_, v]) => v === path) || [];
+
+				if (originKey) {
+					f = f.replace(new RegExp(`'${path}'`, 'g'), `'${originKey}'`);
+				}
+			});
+
+			fs.writeFileSync(fileName, f, 'utf-8');
+		});
+	});
+
+```
+
+앞으로 복사 붙여 넣기 같은 쓰고 귀찮은 작업을 덜 할 수 있을 것 같다. :)
+
+fin.

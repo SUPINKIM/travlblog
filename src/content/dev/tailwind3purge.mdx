@@ -1,0 +1,53 @@
+---
+title: "tailwind3과 purge 속성"
+date: "2022-01-30"
+category: "dev"
+tags: ["CSS", "FE", "front end", "tailwind"]
+thumbnail: "https://images.velog.io/images/qorgkr26/post/1899d97d-4013-4659-bf78-3de4f672bb95/스크린샷 2022-01-30 오후 4.22.20.png"
+summary: "회사에서 실무를 시작한 지도 벌써 한 달이 넘어가고 있다.  현재 맡고 있는 프로젝트에서 css는 tailwind라는 라이브러리를 사용하고 있는데 이 친구는 정말 재밌게도 html class 속성 값을 추가해 css를 적용하는 모습을 취하고 있다. 처음에는 굉장히 생소"
+originalUrl: "https://velog.io/@qorgkr26/tailwind3purge"
+---
+
+회사에서 실무를 시작한 지도 벌써 한 달이 넘어가고 있다.
+
+현재 맡고 있는 프로젝트에서 css는 tailwind라는 라이브러리를 사용하고 있는데 이 친구는 정말 재밌게도 html class 속성 값을 추가해 css를 적용하는 모습을 취하고 있다. 처음에는 굉장히 생소했는데 쓰다보니 너무 편하고 또 break point도 잘 나눠져 있어 반응형 디자인을 구현하기에도 굉장히 좋다. 
+
+기본 설정도 좋지만 커스텀하고 싶다면 tailwind.config.js를 프로젝트 디렉토리 root에 위치시켜 놓고 필요한 속성을 재정의해주면 된다.
+
+오늘 글을 쓰게 된 것은 tailwind를 사용하면서 굳이 몰라도 되지만 알면 좋은 점들을 정리하기 위함이다.
+
+시작은 이러했다. 팀장님이 만들어주신 프로젝트 템플릿을 로컬에서 돌려보니 tailwind warning이 뜨는 게 아닌가. 그래서 config 파일을 확인해보니 content 속성 안에 enabled 속성과 content 속성 두 가지가 작성되어 있었다. 
+
+```js
+module.exports = {
+	content: {
+		enabled: process.env.NODE_ENV === "production"
+		content: ['./public/index.html','./src/**/*.{ts,tsx}']
+	}
+}
+```
+
+최근에 tailwind를 가지고 프로젝트를 진행하면서 tailwind2에서 3로 컨버팅 하는 작업을 하면서 ~~엄청난 삽질을 했기에~~ tailwind 공식문서를 몇 시간씩 본 사람으로서 content 속성 안에 파일 경로는 지정해줘도 enabled 속성을 지정하거나 content 안에 content를 또 지정할 수 있다는 내용을 본 기억이 없다. 
+
+그래서 해당 속성을 지우고 파일 경로만 작성해주었더니 해당 warning은 사라졌다. tailwind3 버전이 되면서 purge 속성이 content로 변경되었기 때문에 그렇게 수정은 해주었는데 사실 purge 속성이 정확히 무엇을 의미하는지 몰라 오늘 팀장님께 여쭤보았고 또 하나 배워가게 되었다.
+
+purge 속성은 css 최적화와 관련된 속성으로써, 현재 프로젝트 내에서 사용하고 있는 tailwind css 속성만 해석해서 build할 수 있도록 해주는 일종의 최적화 모듈 번들러와 비슷한 역할(이라고 이해했다.)
+
+개발 환경의 경우에는 전체 tailwind css 모듈을 다 불러와도 상관 없지만 운영의 경우에는 최대한 번들링 할 파일을 줄이는 것이 좋으므로 purge 속성을 설정해 개발 환경에 따라 다르게 모듈을 import할 수 있도록 하는 것이다.
+
+그런데 이 속성이 tailwind3으로 버전 업이 되면서 기본적으로 purge 속성이 적용되어 있어 운영 환경에서 build를 할 때 css를 더 최적화 하고 싶다면 cssnano와 같은 툴을 함께 이용하라고 안내하고 있다.
+
+```md
+Optimizing for Production
+Getting the most performance out of Tailwind CSS projects.
+
+Tailwind CSS is incredibly performance focused 
+and aims to produce the smallest CSS file possible 
+by only generating the CSS you are actually using in your project.
+```
+
+cssnano는 결국 만들어진 css 파일을 한 번 더 압축하는 역할인 것이고 purge 속성은 트리 쉐이킹과 좀 더 관련된 개념이라고 보면 좋을 것 같다.
+
+참고 자료 : 
+https://tailwindcss.com/docs/content-configuration
+https://tailwindcss.com/docs/optimizing-for-production

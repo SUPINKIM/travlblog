@@ -1,0 +1,62 @@
+---
+title: "OpenAPItools openapi-generator-cli 사용해보기"
+date: "2023-06-08"
+category: "dev"
+tags: ["API", "FE", "Swagger-ui", "ts", "스웨거", "자동화", "타입스크립트", "프론트엔드"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/5665c341-e2f0-4585-9dc6-0e0465f854e6/image.png"
+summary: "API Response Type 언제까지 일일이 잡아줘야 돼? 좀 해줘~~~ (중요한 건 꺾이지 않는 마음?)"
+originalUrl: "https://velog.io/@qorgkr26/openapi-generator-cli-사용기"
+---
+
+작년 GDC에 참여했을 때 API response 관련한 자동화에 대해 강연을 들은 적이 있다. 그 때는 신기했지만 우리 회사는 API 명세가 제대로 작성되어 있는 경우가 많지 않았고, 작성되어 있더라도 컨플루언스나 지라 티켓의 설명란에 명세가 적혀 있는 경우가 대부분이어서 거기서 알게된 라이브러리를 실제 프로젝트에 적용해 볼 수 없었다. 그러다 올해 들어 API 명세를 보기에 불편하다는 클라이언트 개발자들의 아쉬움이 공개적으로(?) 대두되면서 우리 회사도 SWAGGER UI를 활용해 API 명세를 작성하게 되었다.(아직 전체 적용은 아니고 일부 API에 대해 명세가 정리되고 있는 듯 하다.) 
+
+모든 API의 response가 그렇진 않지만, 어떤 API들은 response에 많은 정보를 담고 있곤 한다. API 공식 규격이라고 해야 할까? (https://jsonapi.org/) 우리 회사의 API는 그거에 정확히 맞아들어간 형태의 response는 아니지만 그래도 나름대로의 규칙은 갖고 있는데, 대분류 안의 소분류의 필드가 너무 많은 경우에 하나하나 타입을 다 잡아주기 위해서는 해당 API 응답 결과를 ctrl + c, ctrl + v 하면서 텍스트 비교를 해서 reponse를 빼먹은 게 없나 하나하나 검사를 해줘야 한다. type을 잘 잡는 건 너무 좋지만 매번 API가 새로 나오거나 수정될 때마다 그걸 찾아서 수정하는 게 어찌 보면 너무 귀찮고 생산성을 저해하는 것 같다는 생각이 들었다.
+
+그래서 기억 속 한 편에 저장되어 있던 “openapi” 라이브러리를 찾아 나서기 시작했다. 중요한 것은 SWAGGER API Specification이 작성되어 있어야 하는데 SWAGGER API 문서화를 위해서는 해당 명세가 반드시 있어야 하므로 프론트 개발자가 그걸 다시 만들어 줄 필요는 없다.(처음에 명세부터 만들어야 하는 줄 알고 막막했다.) 
+```https://${(yaml | json) 파일 주소} 로 또는 (yaml | json) 파일```을 다운로드 받아서 generator의 input으로 잘 지정해주기만 하면 된다.
+
+https://swagger.io/specification/
+
+그런 다음 결과물로 만들어내고 싶은 언어 타입을 지정해주면 되는데, typescript-axios와 typescript-fetch 둘 다 돌려본 결과 typescript-axios의 경우 api.ts 파일 안에 api response interface가 뭉터기로 작성되어 보기가 힘든 반면에, typescript-fetch의 경우에는 models 디렉토리 안에 interface에 따라서 개별 ts 파일로 분리 되어 있어 보기가 훨씬 편했다. 
+
+ interface 이름은 Spec 파일 내부의 **operationId를** 기준으로 가장 바깥의 interface명이 정해진다.
+
+```jsx
+{
+  content: {
+    a: string;
+    b: number;
+  },
+  items: [{
+    c: string;
+    d: boolean;  
+  }]
+}
+```
+
+(만들어진 모양을 보고 추측하건대) reponse object 모양이 이런식으로 되어 있다면 그 내부의 content의 interface명은 ```${operationId}Content``` 이런 식으로 지어지고, Array 형태라면 ```${operationId}ItemsInner```와 같이 Inner라는 suffix가 붙는다. 
+
+실행 방법은 docker로 터미널에서 실행시켜도 되고 npm 모듈을 설치해도 된다. 처음에는 npm으로 안 되는 줄 알고 docker로 했는데 jar 파일을 wrapping 시켜둬서 npm 라이브러리를 설치하면 사용 가능하다. 필자는 package.json 내부에 script 만들어서 사용하도록 했다.
+
+```
+openapi-generator-cli generate -g typescript-fetch -i ${yaml 파일 주소} -o ${결과물을 생성할 디렉토리 위치}
+```
+
+
+API Call이나 Object를 JSON 형태로 바꿔주는 코드들도 같이 생기는데 이 코드들은 당장에 크게 사용할 일은 없어서 초반에는 인터페이스 부분만 가져다가 re-naming 해서 사용할 것 같다. 더 잘 쓸 수 있는 방법이 있을지는 조금 더 고민해봐야 할 것 같다.
+
+fin.
+
+[참고한 자료들]
+
+* npm | yarn 사용 시
+https://github.com/openapitools/openapi-generator-cli
+
+* Open API Generator option 
+https://openapi-generator.tech/docs/usage#generate
+
+* Open API Generator languages
+https://openapi-generator.tech/docs/generators/
+
+* 도커 사용 시 참고한 블로그
+https://blog.songc.io/react/openapi-generator/

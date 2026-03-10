@@ -1,0 +1,187 @@
+---
+title: "RxJS 시작해보기 1"
+date: "2025-02-28"
+category: "dev"
+tags: ["FE", "Observer Pattern", "front end", "rxjs", "rxjs demo", "rxjs tutorial", "study", "함수형 프로그래밍"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/5c1f37a4-540c-432d-adc2-6046ad5bf61f/image.png"
+summary: "RxJS를 가지고 이런저런 데모를 만들어보면서 평소 궁금하고 알아보고 싶었던 기술을 익히는 일종의 play ground 입니다. 반박 시 님들 말이 다 맞음 👐 수고. ✋ RxJS 공식문서 주소  RxJS 하면 단순히 이벤트 기반 핸들링 라이브러리, 함수형 프로그래밍"
+originalUrl: "https://velog.io/@qorgkr26/RxJS-시작해보기-1"
+---
+
+> RxJS를 가지고 이런저런 데모를 만들어보면서 평소 궁금하고 알아보고 싶었던 기술을 익히는 일종의 play ground 입니다. 반박 시 님들 말이 다 맞음 👐 수고.
+[✋ RxJS 공식문서 주소](https://rxjs.dev/)
+
+RxJS 하면 단순히 이벤트 기반 핸들링 라이브러리, 함수형 프로그래밍 이런 단어만 떠오르는데 함수형 프로그래밍에 관심이 많은 저로서 항상 궁금하고 한 번 써보고 싶어서 가끔씩 공식 문서도 기웃거렸지만 귀찮다는 핑계로 차일피일 미루고 미루다 이제 더 이상 미루면 안 될 거 같아 가볍게 시리즈로 한 번 RxJS 튜토리얼 시리즈를 만들어 보면 어떨까 싶어서 이렇게 또 컴퓨터 앞에 앉아 글을 끄적대고 있습니다.
+
+거두절미 하고 시작해보시죠.
+
+> demo는 Vite ^6.0.5, typescript ^5.6.2, rxjs ^7.8.1 를 사용했습니다.
+
+
+일단 가볍게 버튼과 숫자 display를 만들어보도록 하겠습니다. 버튼을 누르면 1씩 증가하도록 event listner를 달아두었습니다.
+
+```js
+const add = () => {
+  const display = document.getElementById("display");
+
+  if (!display) return;
+
+  display.innerText = String(Number(display?.innerText) + 1);
+};
+
+(function () {
+  const app = document.getElementById("app");
+
+  const container = document.createElement("div");
+
+  const button = document.createElement("button");
+  const display = document.createElement("p");
+
+  button.innerText = "+";
+  button.setAttribute("id", "add");
+  button.addEventListener("click", add);
+
+  display.innerText = "0";
+  display.setAttribute("id", "display");
+
+  container.appendChild(display);
+  container.appendChild(button);
+
+  app?.appendChild(container);
+})();
+```
+
+![버튼을 누르면 1씩 증가하는 demo](https://velog.velcdn.com/images/qorgkr26/post/b010fa34-020f-4ee6-9932-7bb38d4ad821/image.gif)
+
+일반적으로는 dom node에 직접 addEventListner 메소드를 통해 이벤트 발생 시 실행할 콜백을 지정해줍니다. 하지만 fronEvent 함수를 이용해도 동일한 기능을 수행할 수 있습니다. `subscribe`라는 메소드가 보이실 텐데요, 이 메소드를 눈여겨 봐주세요. 앞으로 자주 나올 함수입니다.
+
+`
+button.addEventListener("click", add);
+`
+
+```js
+import { fromEvent } from 'rxjs';
+
+fromEvent(button, "click").subscribe(add);
+```
+
+그리고 이 코드는 다시 아래와 같이 변환할 수 있습니다.
+
+```js
+  fromEvent(button, "click")
+    .pipe(scan((count) => count + 1, 0))
+    .subscribe((count) => {
+      const display = document.getElementById("display");
+
+      if (!display) return;
+
+      display.innerText = count.toString();
+    });
+```
+
+일단 저도 pipe나 scan과 같은 메소드에 대해서는 정확히 모르지만 코드를 한 줄 한 줄 해석해볼까요?
+
+scan 함수를 보면 reduce와 비슷하게 생겼습니다. 두 번째 인자에 0이라는 초기값을 주고 첫 번째 인자로 callback을 넘기고 있습니다. click 이벤트가 발생할 때마다 이전 count 값을 기억했다가 이전 값에 + 1을 한 값을 리턴하고 있습니다. pipe의 경우에는 매개변수로 받은 여러 함수를 묶어서 순차적으로 실행하도록 하는 함수로 보입니다. pipe 매개변수로 들어온 fn들의 실행 결과 값이 subscribe 콜백의 인자로 들어옵니다. 그 결과값을 가지고 기존 display 값을 대치합니다. 
+
+pipe 함수의 경우 리턴 값을 보면 Observable 객체를 리턴하고 있습니다. (그렇기 때문에 메소드 체이닝이 가능한 것이겠죠.) pipe 함수는 아래 예제를 보면 여러 콜백을 받아서 실행하는데 인자로 들어온 fn들은 순차적으로 앞의 fn의 실행 결과가 그 다음 fn의 매개변수로 들어옵니다. (참고 👉 [pipe API 문서](https://rxjs.dev/api/index/function/pipe))
+
+![](https://velog.velcdn.com/images/qorgkr26/post/bec7736a-28ab-424d-bbdc-8901232f2aca/image.png)
+
+
+#### [Observable](https://rxjs.dev/guide/observable)
+
+앞서 fromEvent 함수의 결과값, pipe 메소드의 결과값 모두 Observable 이라는 객체입니다. Observable은 대체 무엇일까요?
+
+_**Observables are lazy Push collections of multiple values. They fill the missing spot in the following table:**_
+
+![](https://velog.velcdn.com/images/qorgkr26/post/b5263301-5d3a-4ddf-9113-f449141e1532/image.png)
+
+Observables는 여러 values의 게으른 Push 집합체입니다. Observable을 제외한 나머지는 어느정도 익숙한 개념입니다. Function은 우리가 잘 알고 있는 함수죠. Iterator는 Iterable 프로토콜을 따르는 객체입니다. Promise는 비동기 처리를 위임하는 객체이고, Observable은 ... 처음 봅니다. 
+
+조금 더 읽어볼까요?
+
+#### [Pull vs Push](https://rxjs.dev/guide/observable#pull-versus-push)
+
+_**Pull and Push are two different protocols that describe how a data Producer can communicate with a data Consumer.**_
+
+Pull과 Push는 데이터 생산자가 데이터 소비자와 소통할 수 있는 방법을 기술하는 서로 다른 두 프로토콜입니다.
+
+ ![](https://velog.velcdn.com/images/qorgkr26/post/28b2f5f3-92de-42ab-b06d-89042ace780e/image.png)
+ 
+Pull을 생산자 관점에서 보자면 수동적입니다. 요청이 들어올 때 데이터를 생산하기 때문입니다. (이는 Function의 역할과 일치합니다. Function은 선언적으로 로직을 작성해 둘 뿐 호출되지 않으면 return 하지 않습니다.) 반대로 Pull을 consumer 입장에서 볼까요? 데이터가 요청될 때 결정하기 때문에 능동적입니다.
+ 
+Push를 생산자 관점에서 볼 경우 능동적입니다. 자신의 페이스에 맞게 데이터를 생산하기 때문입니다. 반대로 consumer의 관점에서 보자면 주어진 데이터에 리액션을 해야 하기 때문에 수동적이 됩니다. 즉, Promise는 네트워크 통신이든 웹 API 호출 등 주어진 일을 수행하고 난 뒤 pending에서 fulfilled 상태로 변경합니다.(its own pace) 해당 데이터를 사용하는 쪽에서는 fulfilled 상태가 되었을 때 받은 데이터에 대한 처리가 가능해집니다.(react)
+
+_**RxJS introduces Observables, a new Push system for JavaScript. An Observable is a Producer of multiple values, "pushing" them to Observers (Consumers).**_
+
+RxJs가 Observables라는 자바스크립트의 새로운 Push 시스템을 소개합니다. Observable은 다중 values의 생산자이며 Observers(일종의 소비자들)에게 이 값들을 "Push"합니다. 
+
+_
+1. A Function is a lazily evaluated computation that synchronously returns a single value on invocation.
+2. A generator is a lazily evaluated computation that synchronously returns zero to (potentially) infinite values on iteration.
+3. A Promise is a computation that may (or may not) eventually return a single value.
+4. An Observable is a lazily evaluated computation that can synchronously or asynchronously return zero to (potentially) infinite values from the time it's invoked onwards.
+_
+
+#### [Observer](https://rxjs.dev/guide/observer)
+
+_What is an Observer? An Observer is a consumer of values delivered by an Observable. Observers are simply a set of callbacks, one for each type of notification delivered by the Observable: next, error, and complete._
+
+observer는 쉽게 말하자면 콜백 함수를 모아 둔 자바스크립트 객체입니다.
+
+```js
+const observer = {
+  next: x => console.log('Observer got a next value: ' + x),
+  error: err => console.error('Observer got an error: ' + err),
+  complete: () => console.log('Observer got a complete notification'),
+};
+```
+
+단순히 콜백 함수를 모아둔 객체를 들고 있기만 해서는 소용이 없겠죠? 해당 observer
+를 실행시켜 줄 수 있는, 그런 객체도 필요할 것입니다.
+
+```js
+observable.subscribe(observer);
+```
+
+#### [Observable](https://rxjs.dev/guide/observable)
+
+```js
+import { Observable } from 'rxjs';
+
+const observable = new Observable((subscriber) => {
+  subscriber.next(1);
+  subscriber.next(2);
+  subscriber.next(3);
+  setTimeout(() => {
+    subscriber.next(4);
+    subscriber.complete();
+  }, 1000);
+})
+```
+
+observable 객체는 콜백을 초기값으로 받는데요, 이 때 subscriber라는 객체가 들어옵니다. 이 객체가 바로 우리가 위에서 봤던 observer가 됩니다.
+
+```js
+import { Observable } from 'rxjs';
+ 
+const foo = new Observable((subscriber) => {
+  console.log('Hello');
+  subscriber.next(42);
+});
+ 
+foo.subscribe((x) => {
+  console.log(x);
+});
+foo.subscribe((y) => {
+  console.log(y);
+});
+```
+
+위와 같은 코드가 있다고 했을 때 foo.subscibe를 호출하면 foo observable 객체를 만들 때 전달했던 콜백 함수가 실행이 될 것 입니다. subscriber.next를 두 번째 줄에서 호출하고 있으니 subscribe 메소드의 첫 번째 인자로 전달한 콜백 함수가 자연스럽게 next 함수로 동작을 할 것 입니다. 그렇다면 아마도 subscribe의 첫 번째 매개변수 타입은 대충 `Record<string, Callback> | (values: any) => void` 이런 식이 될 수 있겠네요. 😋
+
+
+꽤나 흥미로운 코드 사용 패턴인 것 같습니다. 다음 시리즈에서는 rxjs의 의도나 내부적인 원리에 대해 좀 더 깊게 들여다보도록 하겠습니다.
+
+fin.
+

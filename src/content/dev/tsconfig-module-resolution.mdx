@@ -1,0 +1,42 @@
+---
+title: "[TIL] tsconfig와 moduleResolution"
+date: "2023-05-20"
+category: "dev"
+tags: ["FE", "TIL", "ts", "typescript"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/de4a4738-f066-4c85-bc24-ca82f0a43f16/image.png"
+summary: "최근에 사이드 프로젝트를 하면서 Vite + React + TypeScript 로 초기 세팅을 했는데 절대 경로를 설정해주기 위해서 tsconfig 파일에 아래와 같이 설정을 해주었다.그런데 vite 데브 서버를 돌리니 계속 파일 위치를 못 찾아서 뭐가 문젠가 봤더니"
+originalUrl: "https://velog.io/@qorgkr26/tsconfig-module-resolution"
+---
+
+최근에 사이드 프로젝트를 하면서 Vite + React + TypeScript 로 초기 세팅을 했는데 절대 경로를 설정해주기 위해서 tsconfig 파일에 아래와 같이 설정을 해주었다.
+
+```ts
+{
+  ...
+  baseUrl: '.',
+  path: {
+    '@/*': ['./src/*']
+  }
+}
+
+```
+그런데 vite 데브 서버를 돌리니 계속 파일 위치를 못 찾아서 뭐가 문젠가 봤더니 바보같이 vite.config.js 파일에 동일한 설정을 해주지 않아서 번들러로 컴파일 했을 때 제대로 파일 위치를 잡지 못한 문제였다. 원래는 resolve alias를 vite config 내에도 동일하게 해주면 파일을 잘 찾았던 거 같은데 잘 안 되어서 vite-tsconfig-path 라이브러리를 설치하고 config plugin에 추가해주었더니 제대로 파일을 찾았다. (간편하군 👍)
+<img src="https://velog.velcdn.com/images/qorgkr26/post/de4a4738-f066-4c85-bc24-ca82f0a43f16/image.png" width="400" />
+
+프로젝트 내부에 있는 tsconfig는 IDE에서 개발할 때 IDE가 .ts 파일을 컴파일 할 때 참조할 떄 사용되고 번들러를 사용할 때는 번들러 내부의 옵션이 따로 필요하기 때문에 둘 다 설정을 해줘야 한다.(곰곰이 생각해보면 당연한 데 왜 놓쳤지..?)
+
+근데 tsconfig 설정 중에 못 보던 게 있었는데 moduleResolution 값이 특이하게 "bundler" 로 되어 있었다. node 아님 classic만 사용되는 줄 알았는데... 
+
+찾아보니 bundler는 TypeScript 5버전 이상부터 지원되는 옵션 값이라고 한다.
+ECMAScript에서는 node가 국룰인 줄 알았는데, typescript 설명을 찾아보니 ECMAScript 모듈 시스템에서 모듈을 찾는 방식을 쓰려면 node보다도 node16이나 nodenext 값을 쓰는 게 권장된다고 한다.(ts version 4.7 이상부터 지원)
+
+bundler 옵션 값은 타입스크립트에게 어차피 외부 번들러로 번들링 될 코드이니 너무 타이트하게 import 규칙을 적용하지 말라~고 주문하는 뜻이라고 한다. (쓰고 보니 너무 애매한데?!)
+
+Vite CLI로 프로젝트를 구성했기 때문에 Vite 입장에서는 어차피 Vite로 빌드할 거라고 생각해서 tsconfig 옵션에 moduleResolution: bundler를 기본값으로 세팅한 것 같다.  
+
+> 참고
+https://dev.to/ayc0/typescript-50-new-mode-bundler-esm-1jic
+https://www.typescriptlang.org/tsconfig#moduleResolution
+https://www.typescriptlang.org/docs/handbook/module-resolution.html
+
+fin.

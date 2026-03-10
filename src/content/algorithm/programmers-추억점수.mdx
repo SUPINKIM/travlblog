@@ -1,0 +1,46 @@
+---
+title: "알고리즘 문제 풀기 - 추억 점수"
+date: "2023-04-18"
+category: "algorithm"
+tags: ["algorithm", "kotlin", "programmers", "study", "알고리즘", "코틀린", "프로그래머스"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/ded42ae3-7b49-4eeb-8ec7-553164ee144f/image.png"
+summary: "요즘 kotlin을 공부중이다.회사 분들이랑 스터디 겸 작은 프로젝트를 하기로 했다. 평소에는 프론트 개발을 하기 때문에 서버 쪽 공부를 하고 싶어서일부러 서버 개발을 맡았는데 아무래도 실무에서는 전혀 사용하지 않는기술과 문제 해결, 언어이다 보니까 속도가 안 난다."
+originalUrl: "https://velog.io/@qorgkr26/programmers-추억점수"
+---
+
+요즘 kotlin을 공부중이다.
+회사 분들이랑 스터디 겸 작은 프로젝트를 하기로 했다. 
+평소에는 프론트 개발을 하기 때문에 서버 쪽 공부를 하고 싶어서
+일부러 서버 개발을 맡았는데 아무래도 실무에서는 전혀 사용하지 않는
+기술과 문제 해결, 언어이다 보니까 속도가 안 난다. ㅎ
+
+하여간에 코틀린이 그렇게 핫하다고 해서 코틀린을 공부할 겸
+가볍게 알고리즘 문제를 풀었다.
+풀고 보니 굳이 hashmap으로 풀 필요가 없었을 것 같긴 한데
+자바스크립트적 사고(?)를 하다보니 모든 걸 key, value로 생각하는 경향이 있어서 그냥 hashmap 갖다가 풀었는데 그냥 array로도 충분히 풀 수 있을 것 같다. kotlin은 그냥 거의 자바라서 자바에서 제공하는 기본 자료구조가 기본적으로 js랑은 비교도 안 되게 많은 것 같다.
+<s>(편하다. 개발 편하게 하네 ㅋ)</s>
+
+통과 코드는 아래와 같다.
+```
+class Solution {
+    fun solution(name: Array<String>, yearning: IntArray, photo: Array<Array<String>>): IntArray {
+        var answer: IntArray = intArrayOf()
+        var map = HashMap<String, Int>(name.size)
+        name.forEachIndexed { index, value ->
+            map.put(value, yearning[index])
+        }
+        photo.forEach { ph -> 
+            var sum: Int = 0
+            ph.forEach { person -> 
+                if (map.containsKey(person)) {
+                    sum += map.get(person)!!.toInt();
+                }
+                println(sum)
+            }
+            answer+=sum
+        }
+        return answer
+    }
+}
+```
+photo는 100 * 100 이고, map이 해당 키를 갖고 있는지 확인하려면 O(n)시간이 들테니 최악의 경우 백만번 정도는 돌 것 같은데 그래도  억 단위로는 안 가서 그런지 통과는 했다 .. 어떻게 풀면 시간 복잡도를 더 줄일 수 있을까? 좀 더 생각해보자.

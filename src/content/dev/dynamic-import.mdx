@@ -1,0 +1,131 @@
+---
+title: "[JS]Dynamic Import의 동작방식(feat. Vite, Cypress)"
+date: "2023-05-17"
+category: "dev"
+tags: ["FE", "JavaScript", "bundler", "core JS", "cypress", "dynamic-import", "front end", "js", "js bundler", "vite", "다이나믹 임포트", "번들러"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/0fe7a880-e488-4935-88dd-2d859fd31021/image.png"
+summary: "Dynamic Import란 자바스크립트 모듈을 필요할 때 불러오는 방식입니다.Javascript는 ECMAscript 표준으로 dynamic import를 다음과 같이 지원하고 있습니다."
+originalUrl: "https://velog.io/@qorgkr26/dynamic-Import"
+---
+
+Dynamic Import란 자바스크립트 모듈을 필요할 때 불러오는 방식입니다.
+
+Javascript는 ECMAscript 표준으로 dynamic import를 다음과 같이 지원하고 있습니다. 
+
+```jsx
+import(’./module1.js’)
+```
+
+[MDN-import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import)
+
+여기서 중요한 점은 dynamic import의 반환값이 Promise란 점입니다.
+
+Dynamic import의 동작 방식에 대해 고민을 갖기 시작한 것은 회사 내 코드의 작성해 둔 Cypress E2E 테스트 코드가 실패하는 문제가 생겼기 때문입니다. 테스트가 실패한 시점은 회사 내 프로젝트의 번들러를 Webpack에서 Vite로 변경한 시점이었습니다. 테스트가 깨지는 지점은 Dynamic Import로 Component를 불러오는 부분이었는데 번들러의 변경이 테스트 코드 실행에 영향을 준다는 게 처음에는 이해가 가지 않았습니다. 그래서 Vite의 번들링 방식에 대해 찾아보기 시작했습니다.
+
+### Vite는 번들러가 아니다.
+
+정확히 말하자면 Vite는 번들러(Bundler)가 아닙니다. 즉, Webpack과 rollup, parcel과는 다른 도구이며 Vite는 번들러가 아닌 자바스크립트 빌드를 도와주는 빌드 툴입니다. (공식문서에는 “차세대 프론트엔드 개발 툴”이라고 소개하고 있네요.)
+
+그렇기 때문에 Vite는 개발 서버를 구동할 때와 자바스크립트를 빌드할 때 사용하는 번들러가 다릅니다. Dev Server를 구동할 때는 esbuild와 native ESM 모듈 시스템을 사용하고 빌드 시에는 Rollup bundler를 사용하죠. 
+
+### Vite DEV SERVER
+
+앞서 Dev 서버를 구동할 때 esbuild를 사용한다고 말씀드렸는데 esbuild를 어떨 때 사용할까요?
+
+1. node_modules 내부에 있는 외부 모듈을 import는 하는 경우 사전 번들링을 하는데 사용합니다.
+2. TypeScript를 JavaScript로 컴파일 하는 경우에 사용합니다.
+3. JSX 를 컴파일 할 때도 사용한다고 하네요. (제가 주로 담당하는 서비스는 Vue 라이브러리를 사용하고 있어서 JSX는 사용하고 있지 않지만요.)
+
+esbuild로 사전 번들링 된 모듈들은 네이티브 ESM으로 변환됩니다. 그러면 이제 개발자가 개발하고 있는 소스코드를 비롯한 모든 모듈은 ESM 모듈이 됩니다. 그러므로 vite dev 서버에서를 구동하고 웹 이곳 저곳을 돌아다니면 그 때마다 필요한 디펜던시 모듈을 import하게 되는 것이죠. 
+
+[https://vitejs-kr.github.io/guide/dep-pre-bundling.html](https://vitejs-kr.github.io/guide/dep-pre-bundling.html)
+
+변경이 빈번한 소스코드에 대해서 HMR를 지원할 때도 웹팩이나 다른 번들러처럼 entry 지점부터 번들링 할 필요 없이 변경된 파일만 다시 re-load하면 됩니다. 간단하죠. 당연히 속도도 빠를 수밖에 없고요.
+
+(물론 ESM 모듈을 지원하지 않는 브라우저에서는 Vite의 개발 서버를 제대로 구동할 수 없을 것입니다. 그 때는 전통적인 번들링 방식을 쓰거나 폴리필을 추가해주어야 할 것이지만 여기서는 패스하도록 하겠습니다.)
+
+이러한 이유로 Vite Dev 서버를 구동하는 건 WebPack과 비교해서 속도가 비교 불가할 정도로 빠릅니다. 
+
+그렇다고 이게 정말 좋기만 할까요? 🤔
+
+### Vite Build
+
+Vite로 빌드를 하게 되면 이 때는 Rollup Bundler를 쓰게 됩니다.
+
+Rollup도 번들링 시에 웹팩처럼 몇 개의 모듈을 묶어서 하나의 chunk를 만들어 줄 수 있습니다.(manual chunk)
+
+```jsx
+manualChunks: {
+  ...dependencyChunks,
+     test: [
+			'./src/test1.vue',
+			'./src/test2.vue',
+			'./src/test3.vue',
+	],
+}
+```
+
+[https://vitejs-kr.github.io/guide/build.html#chunking-strategy](https://vitejs-kr.github.io/guide/build.html#chunking-strategy)
+
+[https://rollupjs.org/configuration-options/#output-manualchunks](https://rollupjs.org/configuration-options/#output-manualchunks)
+
+manual chunk 옵션을 따로 주지 않아도 dynamic import한 모듈에 대해서는 multiple entry로 번들 결과를 만들어줍니다. 이 때 차이점은 직접 묶어준 manual chunk는 빌드된 index.html header 내에 preload할 모듈로 명시되고 dynamic import의 경우에는 index.html 내에 주입되지는 않지만 dynamic import를 사용하는 페이지에 진입 시 헤더 내에 link 태그가 아래와 같이 주입됩니다. 
+
+```jsx
+<link rel="modulepreload" crossorigin href="/assets/main.3949e347.js">
+```
+
+그러면 이 module load 방식의 차이가 도대체 Cypress test code에 어떻게 영향을 주는 걸까요?
+
+### Cypress Visit
+
+[https://docs.cypress.io/api/commands/visit](https://docs.cypress.io/api/commands/visit)
+
+Cypress Visit 메소드는 방문해야 할 페이지의 url을 매개변수로 받는, Cypress Commands입니다.
+
+E2E 테스트를 하기 위해서는 브라우저가 구동되면 특정 페이지에 진입을 해야하기 때문에 거의 필수적인 커맨드라고 볼 수 있습니다. cy.visit()은 load Event가 발생하면 reslove 됩니다.
+
+제가 작성했던 테스트 코드의 플로우는 다음과 같습니다.
+
+```jsx
+visit > api moking > pre-set(cookie set etc.) > wait api moking
+```
+
+테스트가 실패한 이유는 전처리 과정(pre-set)에서 사용하는 핸들러가 존재하지 않았는데, 그 말은 즉슨 dynamic import로 실행될 모듈이 load되지 않은 상태에서 load 이벤트가 발생했다는 것입니다. 
+
+여기서 load 이벤트가 언제 실행되는지 알아볼 필요가 있겠습니다.
+
+### load 이벤트
+
+[https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/load_event](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/load_event)
+
+load 이벤트는 html을 구성하는 모든 리소스가 성공적으로 로드되었을 때 이벤트가 발생합니다.
+
+그 리소스에는 body뿐만 아니라 link도 포함된다는 것이 중요한 포인트입니다.
+
+위에서 설명했을 때 dynamic import 된 파일은 preload를 위해 link 태그로 주입됩니다.
+
+build 되었을 때는 link 태그에 필요한 모듈이 있는지 알 수 있지만,  dev 서버를 돌렸을 때는 html에 main.ts(entry point) <script\> 태그만 존재하기 때문에 런타임에 dynamic import를 해오고 해당 모듈이 로드되기 전에 이미 load event가 발생하는 것이죠.
+
+#### Vite Dev 서버 실행 시
+
+![](https://velog.velcdn.com/images/qorgkr26/post/f25f8451-adf1-4155-bac6-9437b5dccd34/image.png)
+
+![](https://velog.velcdn.com/images/qorgkr26/post/86e58aa9-e919-4028-b1a0-de8724b5a598/image.png)
+
+DOMContentLoaded 이벤트 발생 후 바로 load 이벤트가 발생하는 것을 볼 수 있죠.
+
+
+#### Build 결과물 로컬 서버 실행 시
+
+![](https://velog.velcdn.com/images/qorgkr26/post/60edc916-b2a4-434e-8188-efcb2a90f34f/image.png)
+![](https://velog.velcdn.com/images/qorgkr26/post/032a9936-a8dc-4bcd-a0c2-ce58db728295/image.png)
+
+번들된 결과물은 주입된 리소스가 많기 때문에 load 이벤트도 dynamic import된 파일이 로드된 후 실행이 되고 DOMContentLoaded 이벤트와 load이벤트 사이의 간극이 큽니다.
+
+
+
+-------------
+단순히 개발을 하는 상황에서는 dynamic import를 활용하는 것이 초기 로딩 속도를 빠르게 할 수 있기 때문에 사용자 경험 측면에서 좋지만, load이벤트와 같이 파일의 로드 순서가 중요한 경우에는 이런 경우도 고려할 수 있어야 될 것 같습니다. 😃
+
+fin.

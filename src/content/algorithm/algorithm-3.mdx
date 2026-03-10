@@ -1,0 +1,95 @@
+---
+title: "[Algorithm] 연속 부분 수열 합의 개수"
+date: "2024-03-01"
+category: "algorithm"
+tags: ["Lv.2", "algorithm", "programmers", "알고리즘 연습", "프로그래머스"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/a962a0a6-1af0-41ff-b3be-92857d7b361a/image.png"
+summary: "[연속 부분 수열 합의 개수] 프로그래머스 알고리즘 문제 풀이"
+originalUrl: "https://velog.io/@qorgkr26/Algorithm-3"
+---
+
+> [👉 직접 문제 풀어보기(링크)](https://school.programmers.co.kr/learn/courses/30/lessons/131701)
+
+
+### 문제
+![](https://velog.velcdn.com/images/qorgkr26/post/956f8e17-8f75-459e-950e-43d2b6a26c05/image.png)
+
+
+#### 조건사항
+![](https://velog.velcdn.com/images/qorgkr26/post/cbdde66e-14e8-4ee6-9844-2a96459feaa9/image.png)
+
+
+
+### 접근법
+
+| 가장 먼저 **Stack**을 떠올렸다.
+
+입력으로 들어온 숫자 배열에서 만들 수 있는 부분 수열의 size를 1부터 N(<= 1000)까지 순회하면서 기본 배열에서 뒤에 추가되는 만큼의 배열을 slice로 복사해서 새 배열을 만들어 준 뒤 해당 배열을 순회하면서 stack 길이와 size를 비교해서 sum의 개수를 카운트해주고 stack을 앞에서부터 하나씩 빼주면서 값을 더하고 빼갔는데 **결과는 시간 초과**.
+
+그래서 두 번째 방법으로는 stack을 버리고 인덱스 간 비교를 선택했다. size마다 start와 end 인덱스를 찾아서 값을 더해주고 빼주면서 순회했지만 여전히 **시간 초과**.
+
+```js
+function (elements) {
+    const answer = [];
+    
+    for (let size = 1; size <= elements.length; size++) {
+        let sum = 0;
+        const newElements = [...elements, ...elements.slice(0, size-1)];
+        
+        let start = 0;
+        let end = size + start - 1;
+        
+        while (start <= end && end < newElements.length) {
+            let count = end - start + 1;
+
+            if (count <= size) {
+                sum += newElements[end];
+                end++;
+            }
+            
+            if (count === size) {
+                if (!answer.includes(sum)) answer.push(sum);
+                sum -= newElements[start];
+                start++;
+            }
+           
+        }
+
+    }
+    
+    return answer.length;
+}
+```
+
+그런데 문제를 보다보니 굳이 전체 다 순회를 할 필요가 없다는 생각이 들었다. 어차피 연속 수열이니 이전에 더해 놓은 값에서 하나씩만 추가되면 된다는 사실을 깨달았다. 바로 다이나믹 프로그래밍 기법을 사용해서 각 인데스에서 시작된 해당 size의 수열의 합을 메모이제이션 해놓고 그 다음 size에서 같은 인덱스에서 이용해주는 방법을 택했다. 
+
+> ⛔️ ** 주의!** 
+그런데 여기서 키포인트는 무조건 Array만 쓰면 안되고 중복 체크는 Set을 이용해서 시간 초과가 안 난다. 반복문 안에서 중복체크를 위해 array.includes 조건을 넣으면 시간 복잡도가 * n이 되기 때문에 시간 초과가 나게 된다.
+
+### 성공 코드
+
+```js
+function solution(elements) {
+    const answer = new Set();
+    const dp = Array.from(new Array(elements.length+1), () => new Array(elements.length).fill(0));
+
+    for (let i = 0; i < elements.length; i++) {
+        dp[1][i] = elements[i];
+        answer.add(dp[1][i]);
+    }
+    
+    for (let size = 2; size <= elements.length; size++) {
+        for (let i = 0; i < elements.length; i++) {
+            const col = size + i - 1 < elements.length ? size + i - 1 : size - (elements.length - i) - 1;
+            dp[size][i] = dp[size-1][i] + dp[1][col];
+            answer.add(dp[size][i]);
+        }
+    }
+    
+    return answer.size;
+}
+```
+✌️ fin.
+
+![](https://velog.velcdn.com/images/qorgkr26/post/71006442-db3b-4ff2-861b-98328369be0d/image.png)
+

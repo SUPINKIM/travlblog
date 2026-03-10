@@ -1,0 +1,68 @@
+---
+title: "[Algorithm] 두 큐 합 같게 만들기"
+date: "2024-01-19"
+category: "algorithm"
+tags: ["2022 Kakao Tech Internship", "algorithm", "programmers", "문제풀이"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/93fa137e-78f7-49a4-988e-7aa665a79a3e/image.png"
+summary: "2022 KAKAO TECH INTERNSHIP > 두 큐 합 같게 만들기"
+originalUrl: "https://velog.io/@qorgkr26/Algorithm-2"
+---
+
+
+### 문제
+
+> https://school.programmers.co.kr/learn/courses/30/lessons/118667
+
+![](https://velog.velcdn.com/images/qorgkr26/post/70931daf-0af5-41da-9190-6d63b6eda866/image.png)
+
+
+### 풀이 아이디어
+
+처음에는 어떻게 풀어야 할 지 감이 안 왔는데 단순하게 두 큐의 합을 계산해서 큰 쪽에서 작은 쪽으로 원소를 빼서 추가해주자는 생각으로 풀었다. 전체 길이가 300000이라서 for문을 두 번 돌 수는 없을 것 같아서 최대한 반복문을 덜 돌 수 있도록 매번 전체 큐의 합을 계산하지 않고 맨 처음 각각 한 번씩만 계산해 준 뒤 그 다음에는 뺀 원소 값만 total이라는 큐의 합 변수에서 더해주고 빼는 식으로 시간 복잡도를 개선했다. 원래는 index로 가장 첫 번째 원소를 가리키지 않고 shift로 빼주고 push를 해주었는데 shift로 하다보니 O(n) 시간 복잡도 때문에 최악의 경우 대략 60만 * 30만까지도 반복문이 돌 수 있을 것 같아서 index로 첫 원소를 가리키고 index를 1씩 증가시켜 주는 방식을 택했다.  
+
+1번 테스트케이스가 계속 실패해서 maxChange 값을 전체 queue 길이보다 1 크게 해서 2배 해주었더니 통과가 됐다. queue의 길이 * 2 횟수만큼 insert/pop을 반복하면 다시 원래 상태로 돌아오게 된다고 생각해서 그렇게 해주었는데 좀 찾아보니 그리디의 경우에는 그것보다는 좀 더 상한치를 높게 잡아야 하는 것 같은데 정확한 이유는 모르겠다. (아시는 분은 댓글에 부탁드려요 🙇‍♀️)![](https://velog.velcdn.com/images/qorgkr26/post/132882ab-8a5a-4035-ab8f-0d54eb59738b/image.jpg)
+
+
+### 정답 코드
+
+```js
+
+function solution(queue1, queue2) {
+    const maxChange = (queue1.length + 1) * 2;
+    
+    const sum = (array) => {
+        return array.reduce((acc, cur) => acc += cur, 0);
+    }
+    
+    let total1 = sum(queue1);
+    let total2 = sum(queue2);
+    
+    let count = 0;
+    
+    let index1 = 0;
+    let index2 = 0;
+    
+    while (total1 !== total2) {
+    
+        if (total1 < total2) {
+            const add = queue2[index2];
+            queue1.push(add);
+            total1 += add;
+            total2 -= add;
+            index2++;
+        } else {
+            const add = queue1[index1];
+            queue2.push(add);
+            total2 += add;
+            total1 -= add;
+            index1++;
+        }
+        
+        count++;
+        
+        if (count > maxChange) break;
+    }
+   
+    return count > maxChange ? -1 : count;
+}
+```
