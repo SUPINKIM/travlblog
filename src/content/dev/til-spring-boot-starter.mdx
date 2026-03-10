@@ -1,0 +1,37 @@
+---
+title: "[TIL] spring boot 초기 세팅"
+date: "2023-04-22"
+category: "dev"
+tags: ["Spring", "Springboot", "gradle"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/912dd2e0-eb17-4f5d-947c-c455e550a753/image.png"
+summary: "김영한님의 스프링 부트 기초 영상을 따라 spring.start.io 에서 spring-kotlin을 generate 했는데intellij에서 계속 초기 빌드 실패가 났다."
+originalUrl: "https://velog.io/@qorgkr26/TIL-spring-boot-starter"
+---
+
+
+김영한님의 스프링 부트 기초 영상을 따라서 spring.start.io 에서 spring-kotlin을 generate 했는데 intellij에서 계속 초기 빌드 실패가 나서 찾아보니 기존에 내 로컬의 자바 버전은 11이었고, 다운받은 spring boot의 버전은 3.0.6 이었는데 
+
+**Spring boot 3.x 버전 사용 시 > java 최소 17버전
+Spring boot 2.x 버전 사용 시 > java 11버전 호환** 
+
+이라는 첫 번째 문제가 있었다.
+
+> brew install openjdk@17
+
+> ~/.zshrc 내 환경 변수 세팅 (java 11대신 17을 가장 먼저 바라보도록) 
+
+> 참고한 블로그
+👉 [java17설치](https://blog.karsei.pe.kr/58)
+👉 [intellij 환경 세팅](https://medium.com/sjk5766/spring-boot-%EB%B2%84%EC%A0%84%EC%97%90-%EB%94%B0%EB%A5%B8-java-%EB%B2%84%EC%A0%84-ff15c5ba7ecb)
+
+
+로컬 환경에 17 버전의 자바를 깔았음에도 불구하고 intellij에서 계속 빌드를 실패하는 문제가 있었는데 그건 intellij 프로젝트 구성 내 jdk가 17 버전이 아닌 11 버전을 바라보는 문제가 있어서 jdk와 gradle 모두 11이 아닌 17을 바라보도록 수정하였더니 빌드에 성공했다!
+
+아마 지난번 처음 혼자 해본다고 만들었던 스프링부트 역시 버전이 문제여서 제대로 빌드가 되지 않았던 것 같다...🥲
+
+초기 세팅은 완료가 되었으니! 본격적으로 개발 공부를 해봐야겠다. (뿌-듯 😎 v_v)
+
+![](https://velog.velcdn.com/images/qorgkr26/post/912dd2e0-eb17-4f5d-947c-c455e550a753/image.png)
+
+
+fin.

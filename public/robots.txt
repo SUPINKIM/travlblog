@@ -1,7 +1,6 @@
 # *
 User-agent: *
 Allow: /
-Disallow: /write
 
 # Host
 Host: https://travle-blog.vercel.app/

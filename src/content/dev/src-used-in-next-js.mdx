@@ -1,0 +1,139 @@
+---
+title: "[TIL] RSC에서 내부 API fetch 시 주의할 점(feat.NEXT.js)"
+date: "2025-01-26"
+category: "dev"
+tags: ["FE", "Route Handlers", "SSR", "Side Project", "TIL", "blog", "front end", "next fetch", "next.js", "rsc", "server component"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/2953b2c6-39ac-4d5b-b722-92368426baf7/image.png"
+summary: "‼️ React Server Component에서 route handlers를 fetch로 호출 시에 주의해야 할 점에 대해 공식문서와 함께 알아봅시다!"
+originalUrl: "https://velog.io/@qorgkr26/src-used-in-next-js"
+---
+
+
+현재 개인 사이드 프로젝트로 여행 블로그를 틈틈이 만들고 있습니다.
+[👉 여행순이 여행 블로그](https://travle-blog.vercel.app/)
+
+(부끄럽게도 그간에 이래저래 바쁘다는 핑계로 최근 약간 손을 놨던 것도 있는데, 😅 이제 다시 열심히 사부작 사부작 컨텐츠를 채워가려고 합니다.)
+
+Next.js를 공부할 겸 해당 기술을 활용해 컨텐츠를 만들고 있는데 리팩토링을 하다가 겪은 trouble shooting을 기록할 겸 새로운 사실을 좀 더 잘 이해하고 정리하고자 기록하게 되었습니다.
+
+
+### * Troubleshooting
+
+문제 상황은 이랬습니다.
+
+현재 블로그 컨텐츠를 작성하고 데이터를 받아오기 위해서 mongo db를 쓰고 있습니다. 블로그 컨텐츠를 작성하는 컴포넌트는 클라이언트 컴포넌트라서 여기서 바로 mongo db에 접근할 수 없기 때문에 내부 API를 하나 만들어서 next 서버에서 db에 새 글을 생성하는 함수를 작성해두고 클라이언트 컴포넌트에서는 API를 호출하게끔 해두었는데 이 때 쓰는 url이 `api/new_post` 와 같은 상대경로 라우팅이었고 db에 데이터를 새로 생성하는 데 아무런 문제가 없었습니다.
+
+[next.js에서 API Routes를 만드는 법](https://nextjs.org/docs/pages/building-your-application/routing/api-routes)
+
+```js
+fetch('/api/new_post', { method: "POST", body: {...}}) // ✅ 호출 성공
+```
+
+그런데 포스팅을 조회하는 쪽 화면에서는 서버 컴포넌트 내에서 바로 db와 커넥션하는 함수를 호출하게 되어 있는데 오랜만에 코드를 보니 해당 함수는 컴포넌트 바깥을 분리하면 좋겠다는 생각이 들었고, 이참에 아예 컨텐츠를 GET 하는 함수도 API Routes로 분리하면 좋겠다는 생각이 들어서 동적 routes를 하나 만들었습니다.
+
+`pages/api/post/[id].ts`
+
+그런데 이렇게 만들고 아래와 같이 호출을 하니 계속 Error가 터지면서 내부 API 핸들러에 접근하지 못하는 문제가 발생했습니다.
+
+```js
+fetch('/api/post/${id}'.replace(id), { method: "GET"}) // ❌ 호출 실패
+```
+
+```js
+// ⛔️ catch error
+TypeError: Failed to parse URL from /api/post/1
+```
+
+```js
+fetch('http://localhost:3000/api/post/${id}'.replace(id), { method: "GET"}) 
+// ✅ 호출 성공
+```
+
+...저는 정말 당황스럽지 않을 수 없었습니다. 왜냐? 눈 씻고 찾아봐도 틀린 부분이 없거든...?
+
+~~(동적 라우팅이 틀린 것도, 잘못된 주소를 작성한 것도... 다 아니라고!)~~ 컴퓨터는 거짓말 하지 않는다!
+
+<img src="https://velog.velcdn.com/images/qorgkr26/post/be662cd0-92bb-4dae-8d38-10665c2a424b/image.png" width="360" />
+
+열심히 구글링을 해보니 다음과 같은 github issues를 발견할 수 있었고, 그 외 비슷한 내용을 정리한 여러 블로그를 찾아서 원인을 파악할 수 있었습니다.
+
+> 참고 링크 https://github.com/vercel/next.js/issues/66330
+
+
+**서버 컴포넌트에서 내부 API를 호출할 때는 상대 경로가 아닌, 정확한 도메인을 포함한 절대경로를 명시해주어야 제대로 내부 API 라우팅에 접근 할 수 있다는 사실**을 알게 되었습니다.
+
+
+### * 공식문서 톺아보기
+
+출처 👉 [Next.js 공식문서 - Fetching own API endpoint in React Server Components](https://nextjs-faq.com/fetch-api-in-rsc)
+
+서버 컴포넌트에서 데이터 페칭에 대해 작성된 Next.js 공식문서 내용을 같이 한 번 살펴보겠습니다.
+
+> _As part of data-fetching, I'm fetching the data from my own API routes or route handlers with a fetch inside a server component like so:_
+
+"data 호출 부분에서, 나는 내 API 라우트 또는 라우트 핸들러로부터 서버 컴포넌트 안에서 fetch 함수를 가지고 데이터를 페칭해 오고 있습니다."
+
+
+```js
+export default async function Page() {
+  const res = await fetch("http://localhost:3000/api/user?uid=123456");
+  const user = await res.json();
+  return <div>{user?.name}</div>;
+}
+```
+> _While this works fine in dev mode, it fails to build. Also I had to use an absolute URL instead of a nicer relative URL. Why is that? Is this the right way to fetch data?_
+
+"이건 dev 환경에서는 작동하는 것처럼 보이지만, 빌드에는 실패합니다."
+~~(아마도 구글링 한 걸 토대로 절대 경로로 썼다면 빌드 시에 실패했겠군?)~~ 
+"그리고 나는 훨씬 나은 상대 경로 대신 절대 경로를 써야했습니다. 왜 이래요? 이게 데이터 페칭 하는 맞는 방법인가요?"
+
+> _No, this is not the right way to fetch data in server components. In short, do not fetch your own API routes or route handlers (from now on, just "route handlers") in server components, instead just call the server-side logic directly._
+
+"아뇨. 이건 서버 컴포넌트에서 데이터를 가져오는 올바른 방식이 아닙니다. 결론적으로, 서버 컴포넌트 내에서는 당신의 API 라우트나 라우트 핸들러에서 (지금부터 "route hnadlers"라고 지칭하겠음) 데이터를 가져오지 마세요 **대신, 그냥 서버 사이드 로직을 직접적으로 호출하세요.**"
+
+라고 명시되었습니다. 즉 서버 컴포넌트에서는 클라이언트 사이드에서 서버에 데이터를 요청하기 위해 쓰는 fetch api, XMLHttpRequest 방식을 활용하지 말라는 것이 공식문서의 요점입니다. 좀 더 살펴보겠습니다.
+
+
+> _If you find yourself having to fetch from localhost:3000 in your own Next.js app (assuming this Next.js app runs on port 3000) and the fetch requires an absolute URL, you are very likely doing something wrong._
+
+"만약 네가 너의 next app(주로 nextx app은 3000번 포트 위에서 구동될 것이므로)의 localhost:3000으로부터 데이터를 가져오려고 하면, fetch는 절대 경로를 요구할 것이고 그러면 넌 거의 100퍼 잘못된 행동을 하게 될거야."
+
+> _Route handlers should be instead used for client-side fetching, interactions with other services/applications, etc. _
+
+"Route handlers는 클라 사이드 (데이터) 페칭, 다른 서비스나 애플리케이션과의 상호작용을 위해서 쓰여야 해." (아마 서버사이드에서 다른 서버의 API를 호출해서 데이터를 가져오는 경우를 의미하는 것으로 보임.)
+
+그러면 여러분은 위에서 살펴본대로 **클라이언트 사이드에서 API routes를 호출할 때는 상대 경로여도 제대로 호출이 잘 되는데, 왜 서버사이드에서는 절대 경로를 요구하는 거임??? 🤷‍♀️** 이라고 자연스레 생각이 들 것입니다.
+
+바로 밑에 그에 대한 대답도 나와 있습니다.
+
+> _because the browser knows the URL of the current page and hence can understand what host/domain to use. But, in server components, the fetch is run on the server, which is like running a fetch from a Node.js script inside your own computer. It doesn't know what host/domain to use (you don't know the domain of your computer do you?), so you have to specify it explicitly._
+
+클라이언트 컴포넌트에서 fetch API를 사용해 데이터를 페칭하는 경우 그 환경은 브라우저 환경입니다. 브라우저는 (우리 생각보다 훨씬 더) 똑똑하기 때문에 이미 현재 페이지의 URL을 알고 있고 그러므로 도메인과 host 정보 역시 이미 이해하고 있는 것이죠. 그러나 서버 컴포넌트의 경우에는 Node.js 라는 서버 환경에서 fetch가 동작하기 때문에 제 (서버) 컴퓨터 내부에서 데이터 페칭을 시도할 것이고 컴퓨터 내부에서는 host/도메인 정보를 알 수 없기 때문에 URL을 정확하게 구체적으로 명시해주어야 하는 것입니다.
+
+
+**🙋‍♀️ 그럼 dev 환경에서는 성공하지만 build 시에 실패하는 이유는요?**
+
+개발 환경이 동작하는 것은 (서버 역할을 하고 있는 내 컴퓨터가) 실행되고 있기 때문입니다. 그렇기 때문에 개발 모드나 런타임 환경(빌드 후 서버 구동)에서는 fetch가 정상적으로 동작합니다. 하지만 빌드 시에는 서버가 구동되고 있지 않기 때문에 fetch도 실패하게 되는 것이죠.
+
+```js
+export const getPost = async (id: string): Promise<Contents | null> => {
+  try {
+    await client.connect();
+
+    const res = await client
+      .db('db 이름')
+      .collection('collection 이름')
+      .findOne<Contents>({ id: parseInt(id) });
+
+    await client.close();
+
+    return res;
+  } catch (error) {
+    return null;
+  }
+};
+```
+
+**✅ 결론: 서버 컴포넌트에서는 fetch api를 호출하지 말고 직접 데이터 페칭 로직을 작성해서 데이터를 받아올 것**
+
+fin.

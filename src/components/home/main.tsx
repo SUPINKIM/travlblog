@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  BookOpen,
   Briefcase,
   Code2,
   ExternalLink,
@@ -13,12 +14,20 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import { ActivitySection } from "@/components/home/activity-section";
+import { RecentPosts } from "@/components/home/recent-posts";
 import {
   PROJECTS,
   SKILLS,
   SOCIAL_LINKS,
   TRAVEL_DESTINATIONS,
 } from "@/constant/home-data";
+import type { PostMeta } from "@/lib/constants";
+
+interface HomePageProps {
+  recentPosts?: PostMeta[];
+  activityMap?: Record<string, number>;
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -29,7 +38,7 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-export default function HomePage() {
+export default function HomePage({ recentPosts = [], activityMap = {} }: HomePageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -98,16 +107,23 @@ export default function HomePage() {
               className="flex items-center justify-center gap-3 flex-wrap"
             >
               <Link
-                href="/travel"
+                href="/blog"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
               >
+                <BookOpen size={16} />
+                Blog
+              </Link>
+              <Link
+                href="/travel"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium text-sm hover:bg-secondary/80 transition-colors"
+              >
                 <Plane size={16} />
-                Travel Blog
+                Travel
               </Link>
               <a
                 href="https://github.com/SUPINKIM"
                 target="_blank"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium text-sm hover:bg-secondary/80 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-surface-2 border border-border text-foreground rounded-lg font-medium text-sm hover:bg-surface-3 transition-colors"
               >
                 <Github size={16} />
                 GitHub
@@ -330,6 +346,14 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Activity Heatmap Section */}
+      {Object.keys(activityMap).length > 0 && (
+        <ActivitySection activityMap={activityMap} />
+      )}
+
+      {/* Recent Posts Section */}
+      {recentPosts.length > 0 && <RecentPosts posts={recentPosts} />}
 
       {/* Interests Section - 간결한 포인트 */}
       <section className="py-24 px-6 bg-surface-1">

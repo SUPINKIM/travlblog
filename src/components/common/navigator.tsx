@@ -1,19 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Compass, Mountain, Pencil, Play, Plane } from "lucide-react";
+import { BookOpen, Plane } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "/travel", label: "Travel", icon: Plane, adminOnly: false },
-  { href: "/videos", label: "Videos", icon: Play, adminOnly: false },
-  { href: "/climbing", label: "Climbing", icon: Mountain, adminOnly: false },
-  { href: "/write", label: "Write", icon: Pencil, adminOnly: true },
+  { href: "/blog", label: "Blog", icon: BookOpen },
+  { href: "/travel", label: "Travel", icon: Plane },
 ] as const;
-
-const isDevMode = process.env.NODE_ENV === "development";
 
 const Navigator = () => {
   const pathname = usePathname() ?? "";
@@ -49,7 +45,7 @@ const Navigator = () => {
 
         {/* Nav Links */}
         <div className="flex items-center gap-1">
-          {NAV_ITEMS.filter((item) => !item.adminOnly || isDevMode).map(({ href, label, icon: Icon }) => {
+          {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
             const isActive =
               pathname === href || pathname.startsWith(href + "/");
             return (

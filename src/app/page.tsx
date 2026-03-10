@@ -1,12 +1,9 @@
 import HomePage from "@/components/home/main";
+import { getAllPosts, getPostActivityMap } from "@/lib/mdx";
 
 export default async function Home() {
-  return (
-    // <div className="h-screen w-full flex justify-center items-center bg-slate-950">
-    //   <div className="py-[10px] flex items-center justify-center">
-    //     <Buttons />
-    //   </div>
-    // </div>
-    <HomePage />
-  );
+  const recentPosts = getAllPosts().slice(0, 5);
+  const activityMap = getPostActivityMap();
+
+  return <HomePage recentPosts={recentPosts} activityMap={activityMap} />;
 }

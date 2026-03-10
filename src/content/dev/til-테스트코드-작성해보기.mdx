@@ -1,0 +1,31 @@
+---
+title: "[TIL] 테스트코드 작성해보기"
+date: "2023-10-09"
+category: "dev"
+tags: ["FE", "test code", "testing library", "vitest", "vue"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/2f57224b-ae5a-4cac-b03a-1ab9ec0e8ba0/image.png"
+summary: "일하고 있는 팀에서 결제 쪽 플로우에 cypress를 도입한 이후 다른 팀원들의 vitest 스터디가 있었고, 나도 작업한 프로젝트에 가볍게나마 단위 테스트를 붙여보고 싶어서 시도해보았다."
+originalUrl: "https://velog.io/@qorgkr26/TIL-테스트코드-작성해보기"
+---
+
+일하고 있는 팀에서 결제 쪽 플로우에 cypress를 도입한 이후 다른 팀원들의 vitest 스터디가 있었고, 나도 작업한 프로젝트에 가볍게나마 단위 테스트를 붙여보고 싶어서 새 프로젝트 시작 전에 vitest와 testing-library를 가지고 테스트 케이스를 발라서 작성해보았다.
+
+확실히 node 환경에서 컴포넌트를 렌더링하고 테스트를 진행하다 보니 실 브라우저 환경에서 테스트를 실행하는 cypress 보다 훨씬 테스트 속도가 빠르다는 장점이 있었다. 
+
+> 필자는 testing library/vue 를 사용했는데 node 환경에서 컴포넌트를 렌더링 할 수 있는 render 함수를 쓰기 위해서는 jsdom 모듈도 필요하다.
+
+그러나 props, module 등 모킹해줘야 하는 부분이 은근 많아서 귀찮다는 생각도 많이 들었다. 그리고 클릭 이벤트와 같이 user event가 트리거 되어 함수를 실행할 때 해당 컴포넌트에서 함수를 실행시키는 게 아니라 부모 컴포넌트 쪽으로 이벤트를 emit하는 경우에는 해당 emit이 발생했는지 정도만 테스트를 하게 되어서 E2E 테스트에 비해서 테스트를 하다만 느낌이었다. 
+
+단일 컴포넌트의 렌더링과 event trigger로 가볍게 테스트 하다 보니 테스트 문장 자체도 되게 단순하게 해야 된다는 걸 알게됐다. (예를 들어 [버튼을 눌러서 모달을 띄우고 그 모달에서 a라는 아이템을 선택하면 해당 데이터가 기존 페이지에 업데이트 된다.] 등의 큰 플로우는 단일 테스트로는 적합하지 않다.)
+
+
+**❌ Trouble Shooting**
+ - 우리 팀은 주로 api 응답값은 tanstack query의 useQuery를 사용해 커스텀 훅을 만들어 default export하고 각각의 컴포넌트에서 해당 hook을 호출해서 사용하는 방식으로 코드를 작성한다. 
+ - 그래서 커스텀 쿼리 훅을 사용하고 있는 컴포넌트를 렌더링 하고 테스트 할 때 해당 모듈(파일) 자체를 모킹해서 사용하려고 하는데 공식 문서에서 가르쳐주는 방식으로 아무리 해도 계속 모킹이 안되고 에러가 나서 이유를 찾다 보니 vitest에서 module mocking을 할 때 named export function만 찾을 수 있기 때문에 default export를 해버리면 name으로 함수를 특정할 수가 없어서 제대로 모킹이 안 되는 문제가 있었다. 
+ - 그래서 default export 대신 **export를 해주었는데** 보통 필자는 하나의 파일(모듈)에서 여러 개의 함수를 export를 해야 하면 default export를 쓰지 않지만 하나의 파일(모듈)에 하나의 함수만 정의되어 있는 경우라면 99.9%의 확률로 default export를 했기 때문에 named export에 대해 다시 생각해보게 됐다. 
+ - 정확히 export되는 함수의 이름을 알고 있으면 해당 함수가 사용되고 있는지 아닌지 알 수 있기 때문에 트리쉐이킹할 때도 구분이 더 쉬울 것 같고(이건 약간 뇌피셜인데 default export를 하면 사용되는 곳이 없어도 번들에 포함이 되는지 안 되는지 테스트를 해보진 않았다.) 오히려 default export보다는 그냥 export가 더 권장되는 것인가에 대해 고민해볼 수 있었다. 나중에 테스트도 한 번 해봐야겠다.
+ 
+ 
+ 
+fin.
+

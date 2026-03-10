@@ -1,0 +1,158 @@
+---
+title: "프로젝트 회고 (feat. 배운 점 정리)"
+date: "2022-03-27"
+category: "dev"
+tags: ["React", "dealicious", "frontend", "kfashionshop", "kfshop", "next.js", "react-query"]
+thumbnail: "https://images.velog.io/images/qorgkr26/post/cc9648a8-8141-4fd0-8425-26ff5e349166/IMG_9520.gif"
+summary: "입사 후 첫 번째로 실무에 투입됐던 프로젝트가 드디어 얼추 마지막을 보이고 있다. 다음주에 마지막 운영 배포를 끝으로 당분간은 해당 프로덕에 새 기능이 추가되지 않을 예정이라 일을 하며 배웠던 것들을 정리해보려고 한다."
+originalUrl: "https://velog.io/@qorgkr26/kfshop-retrospective"
+---
+
+
+입사 후 첫 번째로 실무에 투입됐던 프로젝트가 드디어 얼추 마지막을 보이고 있다.
+다음주에 마지막 운영 배포를 끝으로 당분간은 해당 프로덕에 새 기능이 추가되지 않을 예정이라 
+일을 하며 배웠던 것들을 정리해보려고 한다.
+
+해당 프로젝트는 사용자가 크게 두 가지 버전인데, 
+해당 사이트에서 자신의 매장 페이지를 운영하는 관리자 쪽과
+샵들을 둘러보며 거래처를 맺으려고 하는 사용자 쪽으로 나뉜다.
+
+관리자 쪽은 현재 회원가입을 따로 할 수 있는 루트는 없다. 
+회사 메인 서비스의 가입된 고객이 샵을 생성하면 sso로 연동돼서 
+kfshop 사이트의 토큰이 주어지고 해당 토큰으로 로그인 여부를 판별하기 때문이다.
+
+
+개발을 하며 사용한 스택은 다음과 같다.
+
+> #### Framework : Next.js (react)
+> #### CSS : Tailwindcss
+> #### Status : React Query + Context API
+> TypeScript 사용 🚀  
+
+React 기반의 프레임워크인 Next.js를 이용해 개발했고 
+
+상태 관리의 경우에는 기본적으로 react query 라이브러리를 활용했고 
+클라이언트 상태 관리가 추가로 필요한 경우에는 Context api를 사용했다.
+
+css의 경우 tailwindcss 라이브러리를 활용했다. 
+
+검색 노출이 잘 돼야 하는 프로덕의 특성상 next.js를 선택한 것으로 알고 있는데
+사실 react.js랑 크게 다른 점은 없기에 next.js를 쓰면서 크게 어려웠던 점은 없다.
+
+딱 한 번 Middleware를 쓰면서 멘붕에 빠진 적이 있는데, 
+page 생성 시 server side에서 token check를 해서 로그인이 되지 않은 사용자거나 
+사용자가 관리자 페이지에 접근하려는 경우와 같은 때에 미들웨어를 통해 체크를 해주려고 했는데
+아예 다른 경로롤 리다이렉션 하는 경우는 상관이 없었지만 해당 미들웨어에서 하위 경로로
+리다이렉션 하는 경우에 그 미들웨어를 다시 거치면서 한 번에 페이지 이동이 되지 않는 문제점이 있었다.
+
+예를 들어 about이라는 경로로 이동을 할 때 about dir 내에 index.tsx를 거치기 전에 
+맨 상위의 middleware를 거치고, 그 다음 index.tsx를 갔을 때
+```js
+redirection: {
+	destination: 'about/about2'
+}
+```
+라는 코드를 만나면 다시 맨 상위의 middleware를 타고 about/about2로 바로 가지 않고 
+about2 > index.tsx를 컴파일만 한 뒤 가만히 있는 현상이었는데 아직도 속 시원히 그 이유를 찾진 못했다.
+
+그래서 다시 각 페이지의 getServerSideProps 쪽에 사용자 체크를 하는 코드를 넣는 것으로
+우회하긴 했는데 이제 시간이 생겼으니, 코드를 다시 보면서 이유를 찾아보면 좋을 것 같다.
+(혹시 이유를 알고 계신 분이 있다면 공유를 부탁드립니다. 🙇‍♂️ )
+
+_____
+
++ 다시 확인하니 맨 처음에는 _middleware -> about 까지만 컴파일하고   
+  두 번째 버튼 클릭 시에 _middleware -> about2를 컴파일한다.
+
+```md
+If you do have sub-directories with nested routes, 
+Middleware will run from the top down. 
+For example, if you have /pages/about/_middleware.ts and /pages/about/team/_middleware.ts,
+/about will run first and then /about/team. 
+The below example shows how this works with a nested routing structure.
+
+- package.json
+- /pages
+    index.tsx
+    - /about
+      _middleware.ts # Will run first
+      about.tsx
+      - /teams
+        _middleware.ts # Will run second
+        teams.tsx
+Middleware runs directly after redirects and headers, 
+before the first filesystem lookup. This excludes /_next files.
+```
+
+---------------------------------------------------------------
+
+이번 프로젝트를 하면서 **react query**에 대해 많이 알게 됐는데
+사용자의 액션에만 해당 값이 변경되고 그 외의 일로 서버의 값이 바뀔 일이 없다면
+mutate가 일어나고 서버로 get 요청을 할 필요 없이 키 관리로 query client의 값을 업데이트 시켜주고
+그걸 다른 컴포넌트에서도 동일하게 쓸 수 있어서 편리했던 것 같다. 
+
+select 옵션을 사용하면 data를 쓰는 곳이 렌더링 될 때 
+**select** 옵션에서 지정해 준 data를 리턴하도록 할 수도 있다.
+이 때 한 가지 불편한 점은 맨 처음 query function에서 
+return하는 값의 모양을 계속 유지해줘야 한다는 점이다.
+
+그래서 나는 select 옵션을 쓰지 않고 onSuccess인 경우에 
+queryClient에 필요한 list만 따로 뽑아 새로운 키로 관리해주고 
+다른 컴포넌트에서 다른 api 콜로 사용자 액션이 일어나고
+
+예를 들어 상품 상세 페이지에서 찜하기 버튼을 누른 경우 
+마이 페이지에서 찜하기 목록을 확인해야 하는 경우에는
+하나의 액션이 다른 API 콜을 쓰는 list에 영향을 주기 때문에 
+queryClient의 cache를 날려서 
+해당 리스트가 다시 렌더링 될 때는 업데이트 된 값을 가져올 수 있도록 했다.
+
+----------------------------------------------------------
+
+그리고 최근에 tailwindcss prettier 플러그인을 새로 적용했는데 
+tailwindcss classname 순서를 깔쌈하게 정리해줘서 너무 좋았다. 
+[prettier-plugin-tailwindcss github](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
+
+그런데 최근에 tailwindcss classname 적용 순서에 있어 내부 로직이 변경 됐는지
+원래는 classnames 모듈을 사용해서 cn으로 엮어 명시한 default css 속성과 자식에서 props
+내려준 classname이 겹칠 경우 마지막에 적용한 값이 잘 의도대로 동작했었는데 최근에
+거의 그렇게 되지 않는다는 사실을 개발하며 알게 되어 변경이 필요한 css 속성의 경우에는 
+아예 모드를 기준으로 구분해서 적용하는 식으로 변경해주었다. 그렇게 작업하기 어려운 곳은 적용하고 싶은 
+속성에 !(important)를 붙여주는 식으로 작업했는데 기회가 되면 모드로 적용할 수 있도록 리팩토링을 해야 할 것 같다.
+
+&lt;기존&gt;
+```js
+// className = 'bg-blue-200 text-blue-600'
+
+<div classname={cn('bg-red-200 text-red-600 flex flex-col', className)} />
+                
+// 기존에는 이렇게 적용하면 blue로 변경됐는데, 어느 순간부터 계속 red가 적용되는 것을 확인.
+```
+
+&lt;변경&gt;
+```js
+const Alert = ({ variant = 'DEFAULT'}) => {
+
+  return <div classname={cn('flex flex-col', {
+	        'bg-red-200 text-red-600': variant === 'DEFAULT',
+            'bg-blue-200 text-blue-600': variant === 'SUCCESS'
+         }
+  )} />
+}
+
+```
+
+
+첫 실무를 하면서 모르는 것도 많고, 젠킨스로 배포하면서도 삽질 많이 하고
+nuxt.js도 간간이 다루면서 또 좌절하고 멘붕오고 했는데
+그래도 무사히 프로젝트를 마치게 되었고 또 하면서 많이 성장한 것 같아서 뿌듯하다.
+
+앞으로도 계속 성장하고 배우는 개발자가 되고 싶다. 
+
+fin.
+
+
+----------------- 
+
+프로덕트 보러가기 👇 🚀 
+
+https://kfashion.shop/

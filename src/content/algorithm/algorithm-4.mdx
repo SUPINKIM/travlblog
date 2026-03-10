@@ -1,0 +1,104 @@
+---
+title: "[Algorithm] 더 맵게"
+date: "2024-03-02"
+category: "algorithm"
+tags: ["Lv.2", "algorithm", "heap", "programmers", "문제풀이", "최소힙"]
+thumbnail: "https://velog.velcdn.com/images/qorgkr26/post/0c3101e7-fae9-4e74-b748-1263bc6c1f73/image.png"
+summary: "프로그래머스 lv.2 힙 구조자료 연습 문제"
+originalUrl: "https://velog.io/@qorgkr26/Algorithm-4"
+---
+
+### 문제 및 제한 사항
+
+![](https://velog.velcdn.com/images/qorgkr26/post/1ec7124f-cb13-4275-a35b-c97b23ffd974/image.png)
+
+![](https://velog.velcdn.com/images/qorgkr26/post/6a862241-4558-4a80-88d7-a728962c5af9/image.png)
+
+
+### 접근법
+문제 자체에 힙 자료구조를 써야 된다고 써 있어서 풀이 방법을 엄청나게 고민하진 않았다.
+
+가장 작은 스코빌과 두 번째로 작은 스코빌을 구해야 하기 때문에 바로 최소힙을 구현해야겠다고 생각하고 push하는 로직과 첫 번째 원소를 꺼내고 힙을 재정렬하는 delete 메소드를 작성해주었다.
+
+scoville 배열의 길이가 최대 100만일 수 있어서 아마 계속 정렬을 하면 O(n^2)의 시간 복잡도가 걸려서 시간 초과로 실패했을 것이다.  
+
+⛔️ 좀 헤맸던 부분은 delete 로직에서 가장 앞의 수를 빼고 가장 뒤의 수를 맨 앞으로 치환하는 로직이 있는데 힙 배열의 크기가 1일 때 예외처리를 안 해주면 계속 넣고 빼서 무한 루프에 빠져버리는 문제가 있다. 그 예외처리를 잘 해줘야 하는 게 포인트인 것 같다.
+
+### 정답코드
+```js
+function solution(scoville, K) {
+    const minHeap = [];
+    
+    const pushNumber = (item) => {
+        minHeap.push(item);
+        
+        let child = minHeap.length-1;
+        let parent = Math.floor((child-1) / 2);
+        
+        while (parent >= 0 && child > parent) {
+            if (minHeap[parent] > minHeap[child]) {
+                [minHeap[parent], minHeap[child]] = [minHeap[child], minHeap[parent]];
+            }
+            child = parent;
+            parent = Math.floor((child-1) / 2);
+        }
+    };
+    
+    const deleteNumber = () => {
+        if (minHeap.length === 1) return minHeap.pop();
+        
+        const min = minHeap[0];
+        const max = minHeap.pop();
+        
+        minHeap[0] = max;
+        
+        let parent = 0;
+        let leftChild = (parent * 2) + 1; // left
+        let rightChild = (parent * 2) + 2;
+        
+        while (leftChild < minHeap.length) {
+            let next = leftChild;
+            
+            if (rightChild < minHeap.length && minHeap[next] > minHeap[rightChild]) {
+                next = rightChild;
+            }
+            
+            if (minHeap[parent] > minHeap[next]) {
+                [minHeap[parent], minHeap[next]] = [minHeap[next], minHeap[parent]];
+            }
+            
+            parent = next;
+            leftChild = (parent * 2) + 1; // left
+            rightChild = (parent * 2) + 2;
+        }
+        
+        return min;
+    };
+    
+    const createNewNumber = (min1, min2) => {
+        return min1 + min2 * 2;
+    }
+    
+    const checkUpScoville = () => {
+        return minHeap.every(value => value >= K);
+    }
+    
+    scoville.forEach(num => {
+        pushNumber(num);
+    })
+
+    let count = 0;
+    while (minHeap.length > 1) {
+        if (checkUpScoville()) return count;
+        const newScoville = createNewNumber(deleteNumber(), deleteNumber());
+        count++;
+        pushNumber(newScoville);
+    }
+    if (!checkUpScoville()) return -1;
+    return count;
+}
+
+
+```
+
+
