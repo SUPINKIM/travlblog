@@ -1,15 +1,8 @@
-import { Link1Icon, Link2Icon, PlusIcon } from "@radix-ui/react-icons";
+import { Link1Icon, Link2Icon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 
 import LinkButton from "@/components/common/link-button";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
 
 import { Nav } from "./constants";
 import Visitor from "./visitor";
@@ -27,45 +20,29 @@ const Header = () => {
 
       <div className="flex items-center gap-x-[8px]">
         <Visitor />
-        <Menubar>
-          <MenubarMenu>
-            <MenubarTrigger className="flex gpa-x-[4px] cursor-pointer">
-              <PlusIcon width={18} height={18} />
-              <span>More</span>
-              <MenubarContent>
-                {Nav.map(({ label, href, icon }) => (
-                  <MenubarItem key={label} className="cursor-pointer">
-                    <Link href={href} className="flex gap-x-[6px] w-full">
-                      {icon}
-                      <span>{label}</span>
-                    </Link>
-                  </MenubarItem>
-                ))}
-              </MenubarContent>
-            </MenubarTrigger>
-          </MenubarMenu>
-
-          <MenubarMenu>
-            <MenubarTrigger className="flex gap-x-[4px] cursor-pointer">
-              <Link1Icon width={18} />
-              <span>OutLink</span>
-            </MenubarTrigger>
-            <MenubarContent align="end">
-              <MenubarItem className="cursor-pointer">
-                <LinkButton
-                  className="w-full"
-                  link="https://my.surfit.io/w/1555709893"
-                  label={
-                    <div className="flex gap-x-[6px] w-full">
-                      <Link2Icon height={18} width={18} />
-                      <span>이력서</span>
-                    </div>
-                  }
-                />
-              </MenubarItem>
-            </MenubarContent>
-          </MenubarMenu>
-        </Menubar>
+        <div className="flex items-center gap-x-[8px] flex-wrap justify-end">
+          {Nav.map(({ label, href, icon }) => (
+            <Link
+              key={label}
+              href={href}
+              className="flex items-center gap-x-[6px] rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
+            >
+              {icon}
+              <span>{label}</span>
+            </Link>
+          ))}
+          <LinkButton
+            className="rounded-md border border-border px-3 py-2"
+            link="https://my.surfit.io/w/1555709893"
+            label={
+              <div className="flex items-center gap-x-[6px] w-full text-sm">
+                <Link1Icon height={18} width={18} />
+                <Link2Icon height={18} width={18} />
+                <span>이력서</span>
+              </div>
+            }
+          />
+        </div>
       </div>
     </div>
   );
