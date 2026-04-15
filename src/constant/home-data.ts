@@ -1,7 +1,8 @@
 export const SKILLS = [
-  { name: "React", value: 90, color: "bg-brand-cyan" },
-  { name: "TypeScript", value: 85, color: "bg-brand-violet" },
-  { name: "Tailwindcss", value: 80, color: "bg-brand-amber" },
+  "TypeScript",
+  "React.js",
+  "Vue.js",
+  "Node.js",
 ] as const;
 
 export const PROJECTS = [
@@ -37,8 +38,8 @@ export const PROJECTS = [
 
 export const FAVORITES = [
   { icon: "plane", label: "여행", desc: "새로운 곳을 탐험하는 것" },
-  { icon: "gaming", label: "게임", desc: "픽셀 아트 & 인디 게임" },
-  { icon: "code", label: "코딩", desc: "아이디어를 현실로" },
+  { icon: "climbing", label: "클라이밍", desc: "한 발씩, 끝까지 오르기" },
+  { icon: "pencil", label: "글쓰기", desc: "생각을 글로 남기는 것" },
   { icon: "book-heart-solid", label: "책", desc: "틈틈이, 자주, 많이 읽기" },
 ] as const;
 
