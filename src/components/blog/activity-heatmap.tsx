@@ -206,7 +206,7 @@ export function ActivityHeatmap({ activityMap }: ActivityHeatmapProps) {
       </div>
 
       {/* Heatmap grid */}
-      <div ref={containerRef} className="w-full">
+      <div ref={containerRef} className="w-full overflow-hidden">
         {/* Month labels */}
         <div className="flex" style={{ paddingLeft: `${28 + gap}px` }}>
           {monthLabels.map(({ label, weekIdx }, idx) => {

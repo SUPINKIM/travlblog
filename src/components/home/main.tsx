@@ -192,30 +192,21 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
           </motion.div>
 
           {/* Skills */}
-          <motion.div variants={fadeInUp} className="space-y-4">
+          <motion.div variants={fadeInUp}>
             <p className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
               <Code2 size={14} />
               TECH STACK
             </p>
-            {SKILLS.map((skill) => (
-              <div key={skill.name} className="space-y-1.5">
-                <div className="flex justify-between text-sm">
-                  <span className="text-foreground font-medium">
-                    {skill.name}
-                  </span>
-                  <span className="text-muted-foreground">{skill.value}%</span>
-                </div>
-                <div className="h-1.5 bg-surface-3 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.value}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                    viewport={{ once: true }}
-                    className={`h-full rounded-full ${skill.color}`}
-                  />
-                </div>
-              </div>
-            ))}
+            <div className="flex flex-wrap gap-2">
+              {SKILLS.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-3 py-1 rounded-full text-sm font-medium bg-surface-3 text-foreground"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       </section>
@@ -380,15 +371,15 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
                 accent: "brand-cyan",
               },
               {
-                emoji: "🎮",
-                title: "게임",
-                desc: "픽셀 아트 & 인디 게임",
+                emoji: "🧗",
+                title: "클라이밍",
+                desc: "한 발씩, 끝까지 오르기",
                 accent: "brand-violet",
               },
               {
-                emoji: "💻",
-                title: "코딩",
-                desc: "아이디어를 현실로",
+                emoji: "✍️",
+                title: "글쓰기",
+                desc: "생각을 글로 남기는 것",
                 accent: "brand-amber",
               },
               {
