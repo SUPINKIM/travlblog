@@ -29,6 +29,9 @@ interface HomePageProps {
   activityMap?: Record<string, number>;
 }
 
+const SIDE_PROJECTS = PROJECTS.filter((p) => p.type === "side");
+const WORK_PROJECTS = PROJECTS.filter((p) => p.type === "work");
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 },
@@ -227,50 +230,109 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
             <h2 className="text-3xl font-bold">만들어온 것들</h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {PROJECTS.map((project) => (
-              <motion.div
-                key={project.name}
-                variants={fadeInUp}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="group p-6 rounded-xl bg-surface-2 border border-border hover:border-brand-violet/30 transition-all duration-300 cursor-pointer"
-                onClick={() => {
-                  if (project.link === "#") return;
-                  window.open(project.link);
-                }}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-semibold text-foreground group-hover:text-brand-violet transition-colors">
-                    {project.name}
-                  </h3>
-                  <span className="text-xs text-muted-foreground bg-surface-3 px-2 py-1 rounded">
-                    {project.year}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                  {project.desc}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-1.5">
+          {/* Side Projects - 직접 배포한 라이브 프로젝트 강조 */}
+          <motion.div variants={fadeInUp} className="mb-10">
+            <p className="text-xs font-semibold text-muted-foreground mb-4 flex items-center gap-2 tracking-wide">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
+              SIDE PROJECTS · 직접 만들어 배포한 것들
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {SIDE_PROJECTS.map((project, i) => (
+                <motion.a
+                  key={project.name}
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={fadeInUp}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="group relative block p-6 rounded-xl bg-gradient-to-br from-surface-2 to-surface-2 border border-brand-violet/20 hover:border-brand-violet/50 hover:shadow-lg hover:shadow-brand-violet/5 transition-all duration-300 overflow-hidden"
+                >
+                  {/* 호버 시 은은한 글로우 */}
+                  <div className="absolute -top-12 -right-12 w-32 h-32 bg-brand-violet/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="relative">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-foreground group-hover:text-brand-violet transition-colors">
+                          {project.name}
+                        </h3>
+                        {i === 0 && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-brand-emerald bg-brand-emerald/10 px-2 py-0.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
+                            LIVE
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground bg-surface-3 px-2 py-1 rounded shrink-0">
+                        {project.year}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                      {project.desc}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] font-medium text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-medium text-brand-violet shrink-0 ml-2">
+                        둘러보기
+                        <ExternalLink
+                          size={12}
+                          className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Work - 회사에서 개발한 프로젝트 */}
+          <motion.div variants={fadeInUp}>
+            <p className="text-xs font-semibold text-muted-foreground mb-4 flex items-center gap-2 tracking-wide">
+              <Briefcase size={12} />
+              WORK · 회사에서 만든 것들
+            </p>
+            <div className="grid md:grid-cols-3 gap-3">
+              {WORK_PROJECTS.map((project) => (
+                <motion.div
+                  key={project.name}
+                  variants={fadeInUp}
+                  className="p-5 rounded-xl bg-surface-2 border border-border"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-semibold text-sm text-foreground">
+                      {project.name}
+                    </h3>
+                    <span className="text-[10px] text-muted-foreground bg-surface-3 px-1.5 py-0.5 rounded shrink-0">
+                      {project.year}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                    {project.desc}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] font-medium text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 rounded"
+                        className="text-[10px] font-medium text-muted-foreground bg-surface-3 px-2 py-0.5 rounded"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  {project.link !== "#" && (
-                    <ExternalLink
-                      size={14}
-                      className="text-muted-foreground group-hover:text-brand-violet transition-colors"
-                    />
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
       </section>
 
