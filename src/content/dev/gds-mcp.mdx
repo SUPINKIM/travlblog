@@ -98,19 +98,19 @@ GDS 토큰 수정 → release 발행 → CI에서 extract + build → 패키지 
 내가 정의한 도구들은 크게 **토큰 / 컴포넌트 / 가이드라인 / 통합 검색**으로 나뉜다.
 전부 "개발자(혹은 에이전트)가 GDS를 쓰다가 궁금해할 법한 질문"을 시나리오로 잡고 만들었다.
 
-| 도구 | 어떤 질문에 답하나 |
-| --- | --- |
-| `list_color_tokens` | "컬러 토큰 어떤 게 있어?" — 전체 목록(이름·값·설명) |
-| `get_color_token` | "Cool Gray/50 값이 뭐야?" — 이름으로 단건 조회 |
-| `find_token_by_value` | "이 `#30333d` 무슨 토큰이야?" — hex 역검색 |
-| `list_tokens` | "spacing 토큰 뭐 있어?" — color·spacing·typography·effect 등 통합 목록 |
-| `get_token` | "SP-04 값이 뭐야?" — 카테고리/이름으로 단건 조회 |
-| `list_components` | "컴포넌트 뭐 있어?" — 컴포넌트 목록 |
-| `get_component_usage` | "이 컴포넌트 어떻게 써?" — 사용 규칙, props, 코드 패턴 |
-| `get_component_code_usage` | "Button 코드로 어떻게 써?" — import, flat/compound 코드 패턴 |
-| `list_guidelines` | "가이드 문서 뭐 있어?" — 가이드라인 목록 |
-| `get_guideline` | "색상 대비 가이드 보여줘" — 가이드라인 단건 조회 |
-| `search_design_system` | "Cool Gray, SP-04, Label 관련 뭐 있어?" — 토큰·컴포넌트·가이드라인 통합 검색 |
+| 도구                       | 어떤 질문에 답하나                                                           |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| `list_color_tokens`        | "컬러 토큰 어떤 게 있어?" — 전체 목록(이름·값·설명)                          |
+| `get_color_token`          | "Cool Gray/50 값이 뭐야?" — 이름으로 단건 조회                               |
+| `find_token_by_value`      | "이 `#30333d` 무슨 토큰이야?" — hex 역검색                                   |
+| `list_tokens`              | "spacing 토큰 뭐 있어?" — color·spacing·typography·effect 등 통합 목록       |
+| `get_token`                | "SP-04 값이 뭐야?" — 카테고리/이름으로 단건 조회                             |
+| `list_components`          | "컴포넌트 뭐 있어?" — 컴포넌트 목록                                          |
+| `get_component_usage`      | "이 컴포넌트 어떻게 써?" — 사용 규칙, props, 코드 패턴                       |
+| `get_component_code_usage` | "Button 코드로 어떻게 써?" — import, flat/compound 코드 패턴                 |
+| `list_guidelines`          | "가이드 문서 뭐 있어?" — 가이드라인 목록                                     |
+| `get_guideline`            | "색상 대비 가이드 보여줘" — 가이드라인 단건 조회                             |
+| `search_design_system`     | "Cool Gray, SP-04, Label 관련 뭐 있어?" — 토큰·컴포넌트·가이드라인 통합 검색 |
 
 특히 `find_token_by_value`는 `#FFF` / `#FFFFFF` / 대소문자 / `#` 유무를 전부 정규화해서 비교하기 때문에,
 시안이나 코드에서 발견한 hex를 그대로 넣어도 매칭된다. 매칭되는 토큰이 없으면 "토큰화되지 않은 값(하드코딩 의심)"이라고 알려주도록 했다.
@@ -142,8 +142,6 @@ MCP 클라이언트(예: Claude Code) 설정에 아래처럼 추가하면 끝이
   }
 }
 ```
-
-{/* TODO(공개 검토): 사내 식별자는 일반화해서 적어둠 — 실제 repo URL, 패키지 스코프(@org), 조직명/코드네임을 공개할지 결정 후 치환 */}
 
 ### 마치며
 
