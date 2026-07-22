@@ -11,17 +11,19 @@ interface BlogPageProps {
 
 export const metadata = {
   title: "Blog | Supin's log",
-  description: "개발, 알고리즘, 에세이, 컨퍼런스 기록",
+  description: "개발, 알고리즘, 컨퍼런스 기록",
 };
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category } = await searchParams;
   const validCategory =
-    category && ["dev", "algorithm", "essay", "conference"].includes(category)
+    category && ["dev", "algorithm", "conference"].includes(category)
       ? (category as Category)
       : undefined;
 
-  const posts = getAllPosts(validCategory);
+  const posts = validCategory
+    ? getAllPosts(validCategory)
+    : getAllPosts().filter((post) => post.category !== "essay");
 
   return (
     <div>
@@ -32,7 +34,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </p>
         <h1 className="text-3xl font-bold mb-2">글 모음</h1>
         <p className="text-muted-foreground text-sm">
-          개발하며 배운 것, 느낀 것, 다녀온 곳들의 기록.
+          개발하며 배우고 경험한 것들의 기록.
         </p>
       </div>
 

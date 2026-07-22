@@ -4,7 +4,6 @@ export const CATEGORIES: { value: Category | "all"; label: string }[] = [
   { value: "all", label: "All" },
   { value: "dev", label: "Dev" },
   { value: "algorithm", label: "Algorithm" },
-  { value: "essay", label: "Essay" },
   { value: "conference", label: "Conference" },
 ];
 

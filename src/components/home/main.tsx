@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Github,
   MapPin,
+  PenLine,
   Plane,
 } from "lucide-react";
 import Image from "next/image";
@@ -17,6 +18,7 @@ import Link from "next/link";
 import { ActivitySection } from "@/components/home/activity-section";
 import { RecentPosts } from "@/components/home/recent-posts";
 import {
+  CAREERS,
   PROJECTS,
   SKILLS,
   SOCIAL_LINKS,
@@ -27,6 +29,7 @@ import type { PostMeta } from "@/lib/constants";
 interface HomePageProps {
   recentPosts?: PostMeta[];
   activityMap?: Record<string, number>;
+  currentYear: number;
 }
 
 const SIDE_PROJECTS = PROJECTS.filter((p) => p.type === "side");
@@ -41,7 +44,11 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-export default function HomePage({ recentPosts = [], activityMap = {} }: HomePageProps) {
+export default function HomePage({
+  recentPosts = [],
+  activityMap = {},
+  currentYear,
+}: HomePageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -63,10 +70,11 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
             <div className="relative inline-block mb-8">
               <div className="w-28 h-28 rounded-full overflow-hidden ring-2 ring-border ring-offset-4 ring-offset-background mx-auto">
                 <Image
-                  src="/profile.png"
+                  src="/profile-2026.png"
                   alt="Supin"
                   width={112}
                   height={112}
+                  priority
                   className="object-cover"
                 />
               </div>
@@ -115,6 +123,13 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
               >
                 <BookOpen size={16} />
                 Blog
+              </Link>
+              <Link
+                href="/essay"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium text-sm hover:bg-secondary/80 transition-colors"
+              >
+                <PenLine size={16} />
+                Essay
               </Link>
               <Link
                 href="/travel"
@@ -169,29 +184,36 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
               안녕하세요, <span className="text-gradient">수빈</span>입니다
             </h2>
             <p className="text-muted-foreground leading-relaxed max-w-2xl">
-              5년차 프론트엔드 개발자로, 현재{" "}
-              <span className="text-foreground font-medium">Levit</span>에서{" "}
-              <span className="text-foreground font-medium">Alwayz 앱</span>과
-              농장 시뮬레이션 게임{" "}
-              <span className="text-foreground font-medium">올팜</span>을
-              개발하고 있어요. 사용자에게 즐거운 경험을 전달하는 서비스를 만드는
+              5년차 프론트엔드 개발자로, 커머스와 게이미피케이션 서비스를
+              만들어 왔어요. 사용자에게 즐거운 경험을 전달하는 서비스를 만드는
               걸 좋아합니다.
             </p>
           </motion.div>
 
-          {/* 현재 직장 */}
-          <motion.div
-            variants={fadeInUp}
-            className="flex items-center gap-3 mb-10 p-4 rounded-xl bg-surface-2 border border-border w-fit"
-          >
-            <Briefcase size={18} className="text-brand-cyan" />
-            <div>
-              <p className="text-sm font-medium">Levit - Alwayz</p>
-              <p className="text-xs text-muted-foreground">
-                Frontend Developer / 2021 ~
-              </p>
+          {/* 경력 */}
+          <motion.div variants={fadeInUp} className="mb-10">
+            <p className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
+              <Briefcase size={14} />
+              CAREER
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {CAREERS.map((career) => (
+                <div
+                  key={`${career.company}-${career.period}`}
+                  className="p-4 rounded-xl bg-surface-2 border border-border"
+                >
+                  <div className="flex items-start justify-between gap-4 mb-1">
+                    <p className="text-sm font-semibold text-foreground">
+                      {career.company}
+                    </p>
+                    <span className="text-xs text-muted-foreground shrink-0">
+                      {career.period}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{career.role}</p>
+                </div>
+              ))}
             </div>
-            <div className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse ml-2" />
           </motion.div>
 
           {/* Skills */}
@@ -402,7 +424,7 @@ export default function HomePage({ recentPosts = [], activityMap = {} }: HomePag
 
       {/* Activity Heatmap Section */}
       {Object.keys(activityMap).length > 0 && (
-        <ActivitySection activityMap={activityMap} />
+        <ActivitySection activityMap={activityMap} currentYear={currentYear} />
       )}
 
       {/* Recent Posts Section */}

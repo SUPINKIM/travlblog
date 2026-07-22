@@ -27,7 +27,7 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
       {posts.map((post) => (
         <Link
           key={post.slug}
-          href={`/blog/${post.slug}`}
+          href={`/${post.category === "essay" ? "essay" : "blog"}/${post.slug}`}
           className="group block p-5 rounded-xl bg-surface-2 border border-border hover:border-brand-cyan/30 transition-all duration-300"
         >
           <div className="flex gap-5">

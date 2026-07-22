@@ -6,6 +6,29 @@ export const SKILLS = [
   "Node.js",
 ] as const;
 
+export const CAREERS = [
+  {
+    company: "레브잇",
+    role: "올팜 스쿼드 FE 개발자",
+    period: "2025 ~ 2026",
+  },
+  {
+    company: "딜리셔스",
+    role: "웹개발팀 FE 개발자",
+    period: "2021 ~ 2025",
+  },
+  {
+    company: "카카오",
+    role: "FE 플랫폼팀 인턴",
+    period: "2021.06 ~ 2021.08",
+  },
+  {
+    company: "파프리카스토리",
+    role: "UX 에이전시",
+    period: "2019 ~ 2020",
+  },
+] as const;
+
 export const PROJECTS = [
   {
     name: "올팜",
@@ -32,12 +55,20 @@ export const PROJECTS = [
     tags: ["React", "Next.js"],
   },
   {
-    name: "우리 동네 지방선거 가이드",
-    desc: "제9회 전국동시지방선거를 앞두고 거주지 기반 후보·공약 정리, 가상 투표 체험, 투표소 안내까지 제공하는 유권자 투표 가이드",
+    name: "콩콩팥팥",
+    desc: "콩을 모아 정원을 가꾸고 토스포인트도 받을 수 있는 앱인토스 힐링 게임",
+    year: "2026",
+    type: "side",
+    link: "https://kongkongpatpat.vercel.app/",
+    tags: ["React", "TypeScript", "앱인토스"],
+  },
+  {
+    name: "우리동네 위스키바",
+    desc: "지역별 위스키 바·하이볼 바·보틀바를 지도에서 찾고, 직접 다녀온 추천 바도 확인할 수 있는 큐레이션 서비스",
     year: "2026",
     type: "side",
     link: "https://local-election-guide.vercel.app/",
-    tags: ["Next.js", "TypeScript", "지도 API"],
+    tags: ["Next.js", "TypeScript", "카카오 로컬 API"],
   },
   {
     name: "오늘의 운세",

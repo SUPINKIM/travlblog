@@ -4,6 +4,7 @@ import "@hackernoon/pixel-icon-library/fonts/iconfont.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Press_Start_2P } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 import Error from "@/components/common/error";
 import { VisitorProvider } from "@/hooks/visitor";
@@ -11,6 +12,9 @@ import { VisitorProvider } from "@/hooks/visitor";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://travle-blog.vercel.app"
+  ),
   title: "Supin's log",
   description:
     "Frontend Developer Supin Kim - Portfolio, Travel Blog & Life Log",
@@ -35,6 +39,7 @@ export default function RootLayout({
             <main className="min-w-[320px] min-h-screen">{children}</main>
           </VisitorProvider>
         </Error>
+        <Analytics />
       </body>
     </html>
   );

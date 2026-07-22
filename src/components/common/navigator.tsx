@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BookOpen, Plane } from "lucide-react";
+import { BookOpen, PenLine, Plane } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
   { href: "/blog", label: "Blog", icon: BookOpen },
+  { href: "/essay", label: "Essay", icon: PenLine },
   { href: "/travel", label: "Travel", icon: Plane },
 ] as const;
 
@@ -26,7 +27,7 @@ const Navigator = () => {
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative overflow-hidden rounded-full ring-2 ring-border group-hover:ring-primary transition-all duration-300">
             <Image
-              src="/profile.png"
+              src="/profile-2026.png"
               alt="Supin"
               width={36}
               height={36}

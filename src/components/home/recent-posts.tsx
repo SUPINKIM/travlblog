@@ -15,6 +15,11 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
+function formatPostDate(date: string): string {
+  const [, month, day] = date.slice(0, 10).split("-").map(Number);
+  return `${month}월 ${day}일`;
+}
+
 const CATEGORY_COLORS: Record<string, string> = {
   dev: "bg-brand-cyan/10 text-brand-cyan",
   algorithm: "bg-brand-violet/10 text-brand-violet",
@@ -58,10 +63,7 @@ export function RecentPosts({ posts }: { posts: PostMeta[] }) {
                     </span>
                     <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
                       <Calendar size={10} />
-                      {new Date(post.date).toLocaleDateString("ko-KR", {
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {formatPostDate(post.date)}
                     </span>
                   </div>
                   <h3 className="text-sm font-medium text-foreground group-hover:text-brand-cyan transition-colors line-clamp-1">

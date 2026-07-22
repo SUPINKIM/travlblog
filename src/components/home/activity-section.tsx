@@ -15,8 +15,10 @@ const stagger = {
 
 export function ActivitySection({
   activityMap,
+  currentYear,
 }: {
   activityMap: Record<string, number>;
+  currentYear: number;
 }) {
   return (
     <section className="py-24 px-6 bg-surface-1">
@@ -38,7 +40,10 @@ export function ActivitySection({
         </motion.div>
 
         <motion.div variants={fadeInUp}>
-          <ActivityHeatmap activityMap={activityMap} />
+          <ActivityHeatmap
+            activityMap={activityMap}
+            currentYear={currentYear}
+          />
         </motion.div>
       </motion.div>
     </section>

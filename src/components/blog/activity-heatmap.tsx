@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface ActivityHeatmapProps {
   activityMap: Record<string, number>;
+  currentYear: number;
 }
 
 interface CellData {
@@ -31,13 +32,13 @@ function getWeeksForYear(
   year: number,
   activityMap: Record<string, number>
 ): CellData[][] {
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
+  const startDate = new Date(Date.UTC(year, 0, 1));
+  const endDate = new Date(Date.UTC(year, 11, 31));
 
   // Adjust start to previous Sunday
-  const startDay = startDate.getDay();
+  const startDay = startDate.getUTCDay();
   if (startDay !== 0) {
-    startDate.setDate(startDate.getDate() - startDay);
+    startDate.setUTCDate(startDate.getUTCDate() - startDay);
   }
 
   const weeks: CellData[][] = [];
@@ -46,11 +47,11 @@ function getWeeksForYear(
   for (
     let d = new Date(startDate);
     d <= endDate;
-    d.setDate(d.getDate() + 1)
+    d.setUTCDate(d.getUTCDate() + 1)
   ) {
     const dateStr = d.toISOString().slice(0, 10);
-    const dayOfWeek = d.getDay();
-    const isInYear = d.getFullYear() === year;
+    const dayOfWeek = d.getUTCDay();
+    const isInYear = d.getUTCFullYear() === year;
 
     currentWeek.push({
       date: dateStr,
@@ -68,8 +69,8 @@ function getWeeksForYear(
     // Fill remaining days
     while (currentWeek.length < 7) {
       const last = currentWeek[currentWeek.length - 1];
-      const nextDay = new Date(last.date);
-      nextDay.setDate(nextDay.getDate() + 1);
+      const nextDay = new Date(`${last.date}T00:00:00Z`);
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
       currentWeek.push({
         date: nextDay.toISOString().slice(0, 10),
         count: -1,
@@ -82,19 +83,25 @@ function getWeeksForYear(
   return weeks;
 }
 
-function getAvailableYears(activityMap: Record<string, number>): number[] {
+function getAvailableYears(
+  activityMap: Record<string, number>,
+  currentYear: number
+): number[] {
   const years = new Set<number>();
   for (const date of Object.keys(activityMap)) {
-    years.add(new Date(date).getFullYear());
+    years.add(Number(date.slice(0, 4)));
   }
   // Always include current year
-  years.add(new Date().getFullYear());
+  years.add(currentYear);
   return Array.from(years).sort((a, b) => b - a);
 }
 
-export function ActivityHeatmap({ activityMap }: ActivityHeatmapProps) {
+export function ActivityHeatmap({
+  activityMap,
+  currentYear,
+}: ActivityHeatmapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(currentYear);
   const [cellSize, setCellSize] = useState(11);
   const [tooltip, setTooltip] = useState<{
     date: string;
@@ -103,7 +110,10 @@ export function ActivityHeatmap({ activityMap }: ActivityHeatmapProps) {
     y: number;
   } | null>(null);
 
-  const availableYears = useMemo(() => getAvailableYears(activityMap), [activityMap]);
+  const availableYears = useMemo(
+    () => getAvailableYears(activityMap, currentYear),
+    [activityMap, currentYear]
+  );
   const weeks = useMemo(
     () => getWeeksForYear(selectedYear, activityMap),
     [selectedYear, activityMap]
@@ -111,13 +121,16 @@ export function ActivityHeatmap({ activityMap }: ActivityHeatmapProps) {
 
   const yearPosts = useMemo(() => {
     return Object.entries(activityMap)
-      .filter(([date]) => new Date(date).getFullYear() === selectedYear)
+      .filter(([date]) => Number(date.slice(0, 4)) === selectedYear)
       .reduce((sum, [, count]) => sum + count, 0);
   }, [activityMap, selectedYear]);
 
   const activeDays = useMemo(() => {
     return Object.entries(activityMap)
-      .filter(([date, count]) => new Date(date).getFullYear() === selectedYear && count > 0)
+      .filter(
+        ([date, count]) =>
+          Number(date.slice(0, 4)) === selectedYear && count > 0
+      )
       .length;
   }, [activityMap, selectedYear]);
 
@@ -129,10 +142,11 @@ export function ActivityHeatmap({ activityMap }: ActivityHeatmapProps) {
     weeks.forEach((week, weekIdx) => {
       // Find first day of this week that's in the selected year
       const dayInYear = week.find(
-        (d) => d.count >= 0 && new Date(d.date).getFullYear() === selectedYear
+        (d) =>
+          d.count >= 0 && Number(d.date.slice(0, 4)) === selectedYear
       );
       if (dayInYear) {
-        const month = new Date(dayInYear.date).getMonth();
+        const month = Number(dayInYear.date.slice(5, 7)) - 1;
         if (month !== lastMonth) {
           labels.push({ label: MONTH_LABELS[month], weekIdx });
           lastMonth = month;
