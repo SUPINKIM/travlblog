@@ -16,15 +16,16 @@ export default function EssayPage() {
 
   return (
     <div>
-      <section className="mb-10 rounded-2xl border border-brand-amber/20 bg-gradient-to-br from-brand-amber/10 via-surface-1 to-background p-7 md:p-10">
-        <p className="text-brand-amber text-sm font-medium mb-3 tracking-wide">
+      <section className="mb-10">
+        <p className="text-brand-amber text-sm font-medium mb-2 tracking-wide">
           ESSAY
         </p>
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">
-          마음에 오래 남은 것들
+        <h1 className="text-2xl font-bold mb-3">
+          부정적 사고 가운데 사랑과 희망, 감사라는 진부한 관념을 노래하다.
         </h1>
         <p className="text-muted-foreground leading-relaxed max-w-2xl">
           일과 삶 사이에서 발견한 마음, 사람, 선택에 관해 씁니다.
+          <br />
           흘려보내고 싶지 않은 생각을 천천히 문장으로 남깁니다.
         </p>
       </section>
