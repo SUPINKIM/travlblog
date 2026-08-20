@@ -19,8 +19,14 @@ const config = {
     },
     extend: {
       fontFamily: {
-        pixel: ["var(--font-pixel)", "cursive"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        pixel: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        sans: [
+          "Wanted Sans Variable",
+          "Wanted Sans",
+          "Apple SD Gothic Neo",
+          "system-ui",
+          "sans-serif",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",
